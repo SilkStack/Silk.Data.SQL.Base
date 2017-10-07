@@ -10,19 +10,34 @@ namespace Silk.Data.SQL.Expressions
 		/// </summary>
 		public abstract ExpressionNodeType NodeType { get; }
 
+		public static ColumnExpression All(QueryExpression source = null)
+		{
+			return Column("*", source);
+		}
+
 		public static TableExpression Table(string tableName)
 		{
 			return new TableExpression(tableName);
 		}
 
-		public static ColumnExpression Column(TableExpression table, string columnName)
+		public static ColumnExpression Column(string columnName, QueryExpression source = null)
 		{
-			return new ColumnExpression(table, columnName);
+			return new ColumnExpression(source, columnName);
 		}
 
 		public static ValueExpression Value(object value)
 		{
 			return new ValueExpression(value);
+		}
+
+		public static CountFunctionExpression CountFunction(QueryExpression expression)
+		{
+			return new CountFunctionExpression(expression);
+		}
+
+		public static AliasExpression Alias(QueryExpression expression, string alias)
+		{
+			return new AliasExpression(expression, alias);
 		}
 
 		/// <summary>
@@ -59,7 +74,7 @@ namespace Silk.Data.SQL.Expressions
 			var table = Table(tableName);
 			return new InsertExpression(
 				table,
-				columnNames.Select(name => Column(table, name)).ToArray(),
+				columnNames.Select(name => Column(name, table)).ToArray(),
 				rowsValues.Select(values => values.Select(value => Value(value)).ToArray()).ToArray()
 				);
 		}
@@ -77,7 +92,7 @@ namespace Silk.Data.SQL.Expressions
 			var table = Table(tableName);
 			return new InsertExpression(
 				table,
-				columnNames.Select(name => Column(table, name)).ToArray(),
+				columnNames.Select(name => Column(name, table)).ToArray(),
 				rowsExpressions
 				);
 		}
@@ -108,7 +123,7 @@ namespace Silk.Data.SQL.Expressions
 			params QueryExpression[][] rowsExpressions)
 		{
 			return new InsertExpression(table,
-				columnNames.Select(name => Column(table, name)).ToArray(),
+				columnNames.Select(name => Column(name, table)).ToArray(),
 				rowsExpressions);
 		}
 

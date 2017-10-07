@@ -37,6 +37,16 @@ namespace Silk.Data.SQL.Providers
 		{
 			var command = DbConnection.CreateCommand();
 			command.CommandText = sqlQuery.SqlText;
+			if (sqlQuery.QueryParameters != null)
+			{
+				foreach (var kvp in sqlQuery.QueryParameters)
+				{
+					var parameter = command.CreateParameter();
+					parameter.ParameterName = $"@{kvp.Key}";
+					parameter.Value = kvp.Value.Value;
+					command.Parameters.Add(parameter);
+				}
+			}
 			return command;
 		}
 

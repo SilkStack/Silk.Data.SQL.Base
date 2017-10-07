@@ -9,5 +9,6 @@
 		ColumnList,
 		RowValues,
 		RowAssignments,
+		ProcedureArguments,
 	}
 }

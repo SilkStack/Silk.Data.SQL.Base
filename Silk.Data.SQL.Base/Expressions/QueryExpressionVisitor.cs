@@ -23,6 +23,12 @@ namespace Silk.Data.SQL.Expressions
 				case ExpressionNodeType.Value:
 					VisitValue(queryExpression);
 					break;
+				case ExpressionNodeType.DbFunction:
+					VisitFunction(queryExpression);
+					break;
+				case ExpressionNodeType.Alias:
+					VisitAlias(queryExpression);
+					break;
 			}
 		}
 
@@ -73,6 +79,7 @@ namespace Silk.Data.SQL.Expressions
 					Visit(delete.WhereConditions);
 					break;
 				case ExecuteStoredProcedureExpression sprocExec:
+					VisitExpressionGroup(sprocExec.Arguments, ExpressionGroupType.ProcedureArguments);
 					break;
 			}
 		}
@@ -92,7 +99,18 @@ namespace Silk.Data.SQL.Expressions
 
 		protected virtual void VisitValue(QueryExpression queryExpression)
 		{
+		}
 
+		protected virtual void VisitFunction(QueryExpression queryExpression)
+		{
+		}
+
+		protected virtual void VisitAlias(QueryExpression queryExpression)
+		{
+			if (queryExpression is AliasExpression aliasExpression)
+			{
+				Visit(aliasExpression.Expression);
+			}
 		}
 	}
 }

@@ -5,6 +5,8 @@
 		Query,
 		Condition,
 		SchemaComponent,
-		Value
+		Value,
+		DbFunction,
+		Alias
 	}
 }

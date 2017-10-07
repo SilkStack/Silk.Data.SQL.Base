@@ -4,12 +4,12 @@
 	{
 		public override ExpressionNodeType NodeType => ExpressionNodeType.SchemaComponent;
 
-		public new TableExpression Table { get; }
+		public QueryExpression Source { get; }
 		public string ColumnName { get; }
 
-		public ColumnExpression(TableExpression table, string columnName)
+		public ColumnExpression(QueryExpression source, string columnName)
 		{
-			Table = table;
+			Source = source;
 			ColumnName = columnName;
 		}
 	}
