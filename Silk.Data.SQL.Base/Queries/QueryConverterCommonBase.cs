@@ -42,6 +42,12 @@ namespace Silk.Data.SQL.Queries
 
 			protected override void VisitQuery(QueryExpression queryExpression)
 			{
+				var isSubQuery = Sql.Length > 0;
+				if (isSubQuery)
+				{
+					Sql.Append("(");
+				}
+
 				switch (queryExpression)
 				{
 					case SelectExpression select:
@@ -86,6 +92,11 @@ namespace Silk.Data.SQL.Queries
 						VisitExpressionGroup(sprocExec.Arguments, ExpressionGroupType.ProcedureArguments);
 						break;
 				}
+
+				if (isSubQuery)
+				{
+					Sql.Append(") ");
+				}
 			}
 
 			protected override void VisitExpressionGroup(ICollection<QueryExpression> queryExpressions, ExpressionGroupType groupType)
@@ -117,6 +128,9 @@ namespace Silk.Data.SQL.Queries
 			{
 				switch (queryExpression)
 				{
+					case AliasIdentifierExpression aliasIdentifierExpression:
+						Sql.Append(Converter.QuoteIdentifier(aliasIdentifierExpression.Identifier));
+						break;
 					case TableExpression tableExpression:
 						Sql.Append(Converter.QuoteIdentifier(tableExpression.TableName));
 						return;
@@ -152,7 +166,10 @@ namespace Silk.Data.SQL.Queries
 				base.VisitAlias(queryExpression);
 
 				if (queryExpression is AliasExpression aliasExpression)
-					Sql.Append($" AS {Converter.QuoteIdentifier(aliasExpression.AliasName)}");
+				{
+					Sql.Append(" AS ");
+					Visit(aliasExpression.Identifier);
+				}
 			}
 		}
 	}

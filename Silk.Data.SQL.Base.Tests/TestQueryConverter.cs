@@ -8,6 +8,8 @@ namespace Silk.Data.SQL.Base.Tests
 
 		protected override string QuoteIdentifier(string schemaComponent)
 		{
+			if (schemaComponent == "*")
+				return "*";
 			return $"[{schemaComponent}]";
 		}
 	}

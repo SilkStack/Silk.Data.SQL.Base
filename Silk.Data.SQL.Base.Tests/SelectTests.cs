@@ -50,11 +50,11 @@ namespace Silk.Data.SQL.Base.Tests
 				"subSelect"
 				);
 			var queryExpression = QueryExpression.Select(
-				new[] { QueryExpression.All(subSelect) },
+				new[] { QueryExpression.All(subSelect.Identifier) },
 				from: subSelect
 				);
 			var sqlQuery = _queryConverter.ConvertToQuery(queryExpression);
-			Assert.Fail("Test not implemented.");
+			Assert.AreEqual("SELECT [subSelect].* FROM (SELECT  @valueParameter1 )  AS [subSelect]", sqlQuery.SqlText);
 		}
 	}
 }
