@@ -250,7 +250,19 @@ namespace Silk.Data.SQL.Queries
 			{
 				if (queryExpression is JoinExpression joinExpression)
 				{
-					Sql.Append(" JOIN ");
+					switch (joinExpression.Direction)
+					{
+						case JoinDirection.Inner:
+							Sql.Append(" INNER ");
+							break;
+						case JoinDirection.Left:
+							Sql.Append(" LEFT OUTER ");
+							break;
+						case JoinDirection.Right:
+							Sql.Append(" RIGHT OUTER ");
+							break;
+					}
+					Sql.Append("JOIN ");
 					Visit(joinExpression.RightColumn.Source);
 					Sql.Append(" ON ");
 					Visit(joinExpression.LeftColumn);

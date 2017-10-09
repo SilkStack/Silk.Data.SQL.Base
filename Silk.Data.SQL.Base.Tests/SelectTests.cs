@@ -237,7 +237,7 @@ namespace Silk.Data.SQL.Base.Tests
 				);
 
 			var sqlQuery = _queryConverter.ConvertToQuery(queryExpression);
-			Assert.AreEqual("SELECT [TestTable].[TestColumn1], [TestTable2].[TestColumn2] FROM [TestTable] JOIN [TestTable2] ON [TestTable].[TestColumn1] = [TestTable2].[TestColumn2]", sqlQuery.SqlText);
+			Assert.AreEqual("SELECT [TestTable].[TestColumn1], [TestTable2].[TestColumn2] FROM [TestTable] INNER JOIN [TestTable2] ON [TestTable].[TestColumn1] = [TestTable2].[TestColumn2]", sqlQuery.SqlText);
 		}
 	}
 }
