@@ -1,18 +1,19 @@
 ﻿namespace Silk.Data.SQL.Expressions
 {
-	public class ConditionExpression : QueryExpression
+	public enum ConditionType
 	{
-		public override ExpressionNodeType NodeType => ExpressionNodeType.Condition;
+		AndAlso,
+		OrElse
+	}
 
-		public QueryExpression Left { get; }
-		public ConditionOperator Operator { get; }
-		public QueryExpression Right { get; }
+	public class ConditionExpression : BinaryQueryExpression
+	{
+		public ConditionType ConditionType { get; }
 
-		public ConditionExpression(QueryExpression left, ConditionOperator @operator, QueryExpression right)
+		public ConditionExpression(QueryExpression left, ConditionType conditionType, QueryExpression right)
+			: base(left, right, BinaryOperation.Condition)
 		{
-			Left = left;
-			Operator = @operator;
-			Right = right;
+			ConditionType = conditionType;
 		}
 	}
 }

@@ -26,6 +26,28 @@ namespace Silk.Data.SQL.Queries
 			return new SqlQuery(ProviderName, Sql.ToString(), ExpressionWriter.Parameters);
 		}
 
+		protected virtual string GetConditionOperatorString(ComparisonOperator @operator)
+		{
+			switch (@operator)
+			{
+				case ComparisonOperator.AreEqual:
+					return "=";
+				case ComparisonOperator.AreNotEqual:
+					return "!=";
+				case ComparisonOperator.GreaterThan:
+					return ">";
+				case ComparisonOperator.GreaterThanOrEqualTo:
+					return ">=";
+				case ComparisonOperator.LessThan:
+					return "<";
+				case ComparisonOperator.LessThanOrEqualTo:
+					return "<=";
+				case ComparisonOperator.Like:
+					return "LIKE";
+			}
+			return null;
+		}
+
 		protected abstract string QuoteIdentifier(string schemaComponent);
 
 		protected class QueryWriter : QueryExpressionVisitor
@@ -61,7 +83,10 @@ namespace Silk.Data.SQL.Queries
 						if (select.Joins != null && select.Joins.Length > 0)
 							VisitExpressionGroup(select.Joins, ExpressionGroupType.Joins);
 						if (select.WhereConditions != null)
+						{
+							Sql.Append(" WHERE ");
 							Visit(select.WhereConditions);
+						}
 						if (select.GroupConditions != null && select.GroupConditions.Length > 0)
 							VisitExpressionGroup(select.GroupConditions, ExpressionGroupType.GroupByClauses);
 						if (select.HavingConditions != null)
@@ -170,6 +195,37 @@ namespace Silk.Data.SQL.Queries
 					Sql.Append(" AS ");
 					Visit(aliasExpression.Identifier);
 				}
+			}
+
+			protected override void VisitBinary(QueryExpression queryExpression)
+			{
+				var binaryExpression = queryExpression as BinaryQueryExpression;
+				if (binaryExpression == null)
+					return;
+
+				Sql.Append("(");
+				Visit(binaryExpression.Left);
+
+				if (binaryExpression.BinaryOperationType == BinaryOperation.Comparison &&
+					queryExpression is ComparisonExpression comparisonExpression)
+				{
+					var operatorStr = Converter.GetConditionOperatorString(comparisonExpression.Operator);
+					if (operatorStr == null)
+						throw new System.InvalidOperationException($"Unsupported condition operator: {comparisonExpression.Operator}");
+
+					Sql.Append($" {operatorStr} ");
+				}
+				else if (binaryExpression.BinaryOperationType == BinaryOperation.Condition &&
+					queryExpression is ConditionExpression conditionExpression)
+				{
+					if (conditionExpression.ConditionType == ConditionType.AndAlso)
+						Sql.Append(" AND ");
+					else
+						Sql.Append(" OR ");
+				}
+
+				Visit(binaryExpression.Right);
+				Sql.Append(")");
 			}
 		}
 	}

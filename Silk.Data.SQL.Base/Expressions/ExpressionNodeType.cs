@@ -3,7 +3,7 @@
 	public enum ExpressionNodeType
 	{
 		Query,
-		Condition,
+		Binary,
 		SchemaComponent,
 		Value,
 		DbFunction,

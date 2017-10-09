@@ -17,8 +17,8 @@ namespace Silk.Data.SQL.Expressions
 				case ExpressionNodeType.SchemaComponent:
 					VisitSchemaComponent(queryExpression);
 					break;
-				case ExpressionNodeType.Condition:
-					VisitCondition(queryExpression);
+				case ExpressionNodeType.Binary:
+					VisitBinary(queryExpression);
 					break;
 				case ExpressionNodeType.Value:
 					VisitValue(queryExpression);
@@ -88,9 +88,9 @@ namespace Silk.Data.SQL.Expressions
 		{
 		}
 
-		protected virtual void VisitCondition(QueryExpression queryExpression)
+		protected virtual void VisitBinary(QueryExpression queryExpression)
 		{
-			if (queryExpression is ConditionExpression conditionExpression)
+			if (queryExpression is ComparisonExpression conditionExpression)
 			{
 				Visit(conditionExpression.Left);
 				Visit(conditionExpression.Right);

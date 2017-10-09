@@ -5,8 +5,8 @@
 		public QueryExpression[] Projection { get; }
 		public QueryExpression From { get; }
 		public QueryExpression[] Joins { get; }
-		public ConditionExpression WhereConditions { get; }
-		public ConditionExpression HavingConditions { get; }
+		public QueryExpression WhereConditions { get; }
+		public QueryExpression HavingConditions { get; }
 		public QueryExpression[] OrderConditions { get; }
 		public QueryExpression[] GroupConditions { get; }
 		public QueryExpression Offset { get; }
@@ -17,8 +17,8 @@
 		public SelectExpression(QueryExpression[] projection,
 			QueryExpression from = null,
 			QueryExpression[] joins = null,
-			ConditionExpression whereConditions = null,
-			ConditionExpression havingConditions = null,
+			QueryExpression whereConditions = null,
+			QueryExpression havingConditions = null,
 			QueryExpression[] orderConditions = null,
 			QueryExpression[] groupConditions = null,
 			QueryExpression offset = null,

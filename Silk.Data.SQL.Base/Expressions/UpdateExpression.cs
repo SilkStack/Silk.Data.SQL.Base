@@ -6,10 +6,10 @@
 
 		public new TableExpression Table { get; }
 		public QueryExpression[] Assignments { get; }
-		public ConditionExpression WhereConditions { get; }
+		public ComparisonExpression WhereConditions { get; }
 
 		public UpdateExpression(TableExpression table, QueryExpression[] assignments,
-			ConditionExpression whereConditions)
+			ComparisonExpression whereConditions)
 		{
 			Table = table;
 			Assignments = assignments;

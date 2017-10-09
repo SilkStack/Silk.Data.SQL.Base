@@ -56,5 +56,46 @@ namespace Silk.Data.SQL.Base.Tests
 			var sqlQuery = _queryConverter.ConvertToQuery(queryExpression);
 			Assert.AreEqual("SELECT [subSelect].* FROM (SELECT  @valueParameter1 )  AS [subSelect]", sqlQuery.SqlText);
 		}
+
+		[TestMethod]
+		public void SelectWithWhere()
+		{
+			var tableExpression = QueryExpression.Table("TestTable");
+			var queryExpression = QueryExpression.Select(
+				new[] {
+					QueryExpression.Column("TestColumn1", tableExpression),
+					QueryExpression.Column("TestColumn2", tableExpression)
+				},
+				from: tableExpression,
+				whereConditions: QueryExpression.Compare(
+					QueryExpression.Column("TestColumn1", tableExpression),
+					ComparisonOperator.AreEqual,
+					QueryExpression.Value("columnValue")
+					)
+				);
+
+			var sqlQuery = _queryConverter.ConvertToQuery(queryExpression);
+			Assert.AreEqual("SELECT [TestTable].[TestColumn1], [TestTable].[TestColumn2] FROM [TestTable] WHERE ([TestTable].[TestColumn1] =  @valueParameter1 )", sqlQuery.SqlText);
+		}
+
+		[TestMethod]
+		public void SelectWithWhereComparison()
+		{
+			var tableExpression = QueryExpression.Table("TestTable");
+			var queryExpression = QueryExpression.Select(
+				new[] {
+					QueryExpression.Column("TestColumn1", tableExpression),
+					QueryExpression.Column("TestColumn2", tableExpression)
+				},
+				from: tableExpression,
+				whereConditions: QueryExpression.AndAlso(
+					QueryExpression.Column("TestColumn1", tableExpression),
+					QueryExpression.Value("columnValue")
+					)
+				);
+
+			var sqlQuery = _queryConverter.ConvertToQuery(queryExpression);
+			Assert.AreEqual("SELECT [TestTable].[TestColumn1], [TestTable].[TestColumn2] FROM [TestTable] WHERE ([TestTable].[TestColumn1] AND  @valueParameter1 )", sqlQuery.SqlText);
+		}
 	}
 }

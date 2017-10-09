@@ -40,6 +40,22 @@ namespace Silk.Data.SQL.Expressions
 			return new AliasExpression(expression, alias);
 		}
 
+		public static ComparisonExpression Compare(QueryExpression left, ComparisonOperator comparisonType,
+			QueryExpression right)
+		{
+			return new ComparisonExpression(left, comparisonType, right);
+		}
+
+		public static ConditionExpression AndAlso(QueryExpression left, QueryExpression right)
+		{
+			return new ConditionExpression(left, ConditionType.AndAlso, right);
+		}
+
+		public static ConditionExpression OrElse(QueryExpression left, QueryExpression right)
+		{
+			return new ConditionExpression(left, ConditionType.OrElse, right);
+		}
+
 		/// <summary>
 		/// Creates a query expression representing a SELECT query.
 		/// </summary>
@@ -48,8 +64,8 @@ namespace Silk.Data.SQL.Expressions
 			QueryExpression[] projection,
 			QueryExpression from = null,
 			QueryExpression[] joins = null,
-			ConditionExpression whereConditions = null,
-			ConditionExpression havingConditions = null,
+			QueryExpression whereConditions = null,
+			QueryExpression havingConditions = null,
 			QueryExpression[] orderConditions = null,
 			QueryExpression[] groupByConditions = null,
 			QueryExpression offset = null,
@@ -135,7 +151,7 @@ namespace Silk.Data.SQL.Expressions
 		/// <param name="assignments"></param>
 		/// <returns></returns>
 		public static UpdateExpression Update(TableExpression table,
-			ConditionExpression where = null,
+			ComparisonExpression where = null,
 			params QueryExpression[] assignments)
 		{
 			return new UpdateExpression(table, assignments, where);
@@ -148,7 +164,7 @@ namespace Silk.Data.SQL.Expressions
 		/// <param name="whereConditions"></param>
 		/// <returns></returns>
 		public static DeleteExpression Delete(TableExpression table,
-			ConditionExpression whereConditions = null)
+			ComparisonExpression whereConditions = null)
 		{
 			return new DeleteExpression(table, whereConditions);
 		}
