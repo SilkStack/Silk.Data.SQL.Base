@@ -4,7 +4,7 @@
 	{
 		public QueryExpression[] Projection { get; }
 		public QueryExpression From { get; }
-		public QueryExpression[] Joins { get; }
+		public JoinExpression[] Joins { get; }
 		public QueryExpression WhereConditions { get; }
 		public QueryExpression HavingConditions { get; }
 		public QueryExpression[] OrderConditions { get; }
@@ -16,7 +16,7 @@
 
 		public SelectExpression(QueryExpression[] projection,
 			QueryExpression from = null,
-			QueryExpression[] joins = null,
+			JoinExpression[] joins = null,
 			QueryExpression whereConditions = null,
 			QueryExpression havingConditions = null,
 			QueryExpression[] orderConditions = null,
@@ -29,6 +29,7 @@
 			Joins = joins;
 			WhereConditions = whereConditions;
 			HavingConditions = havingConditions;
+			GroupConditions = groupConditions;
 			OrderConditions = orderConditions;
 			Offset = offset;
 			Limit = limit;

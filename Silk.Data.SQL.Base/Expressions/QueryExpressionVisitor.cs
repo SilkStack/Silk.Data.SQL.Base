@@ -29,6 +29,9 @@ namespace Silk.Data.SQL.Expressions
 				case ExpressionNodeType.Alias:
 					VisitAlias(queryExpression);
 					break;
+				case ExpressionNodeType.Join:
+					VisitJoin(queryExpression);
+					break;
 			}
 		}
 
@@ -110,6 +113,15 @@ namespace Silk.Data.SQL.Expressions
 			if (queryExpression is AliasExpression aliasExpression)
 			{
 				Visit(aliasExpression.Expression);
+			}
+		}
+
+		protected virtual void VisitJoin(QueryExpression queryExpression)
+		{
+			if (queryExpression is JoinExpression joinExpression)
+			{
+				Visit(joinExpression.LeftColumn);
+				Visit(joinExpression.RightColumn);
 			}
 		}
 	}

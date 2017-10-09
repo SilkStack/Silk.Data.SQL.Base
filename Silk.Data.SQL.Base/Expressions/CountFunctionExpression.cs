@@ -6,7 +6,7 @@
 
 		public QueryExpression Expression { get; }
 
-		public CountFunctionExpression(QueryExpression expression)
+		public CountFunctionExpression(QueryExpression expression = null)
 		{
 			Expression = expression;
 		}

@@ -7,6 +7,7 @@
 		SchemaComponent,
 		Value,
 		DbFunction,
-		Alias
+		Alias,
+		Join
 	}
 }

@@ -88,15 +88,35 @@ namespace Silk.Data.SQL.Queries
 							Visit(select.WhereConditions);
 						}
 						if (select.GroupConditions != null && select.GroupConditions.Length > 0)
+						{
+							Sql.Append(" GROUP BY ");
 							VisitExpressionGroup(select.GroupConditions, ExpressionGroupType.GroupByClauses);
+						}
 						if (select.HavingConditions != null)
+						{
+							Sql.Append(" HAVING ");
 							Visit(select.HavingConditions);
+						}
 						if (select.OrderConditions != null && select.OrderConditions.Length > 0)
+						{
+							Sql.Append(" ORDER BY ");
 							VisitExpressionGroup(select.OrderConditions, ExpressionGroupType.OrderByClauses);
+						}
 						if (select.Limit != null)
+						{
+							Sql.Append(" LIMIT ");
 							Visit(select.Limit);
+						}
 						if (select.Offset != null)
+						{
+							if (select.Limit == null)
+							{
+								Sql.Append(" LIMIT ");
+								Visit(QueryExpression.Value(int.MaxValue));
+							}
+							Sql.Append(" OFFSET ");
 							Visit(select.Offset);
+						}
 						break;
 					case InsertExpression insert:
 						Visit(insert.Table);
@@ -128,6 +148,8 @@ namespace Silk.Data.SQL.Queries
 			{
 				switch (groupType)
 				{
+					case ExpressionGroupType.GroupByClauses:
+					case ExpressionGroupType.OrderByClauses:
 					case ExpressionGroupType.Projection:
 						{
 							var expressionCount = queryExpressions.Count;
@@ -139,10 +161,6 @@ namespace Silk.Data.SQL.Queries
 								if (i < expressionCount)
 									Sql.Append(", ");
 							}
-						}
-						return;
-					case ExpressionGroupType.Joins:
-						{
 						}
 						return;
 				}
@@ -226,6 +244,19 @@ namespace Silk.Data.SQL.Queries
 
 				Visit(binaryExpression.Right);
 				Sql.Append(")");
+			}
+
+			protected override void VisitJoin(QueryExpression queryExpression)
+			{
+				if (queryExpression is JoinExpression joinExpression)
+				{
+					Sql.Append(" JOIN ");
+					Visit(joinExpression.RightColumn.Source);
+					Sql.Append(" ON ");
+					Visit(joinExpression.LeftColumn);
+					Sql.Append(" = ");
+					Visit(joinExpression.RightColumn);
+				}
 			}
 		}
 	}

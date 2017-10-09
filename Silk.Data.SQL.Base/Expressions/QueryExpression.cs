@@ -30,7 +30,7 @@ namespace Silk.Data.SQL.Expressions
 			return new ValueExpression(value);
 		}
 
-		public static CountFunctionExpression CountFunction(QueryExpression expression)
+		public static CountFunctionExpression CountFunction(QueryExpression expression = null)
 		{
 			return new CountFunctionExpression(expression);
 		}
@@ -56,6 +56,12 @@ namespace Silk.Data.SQL.Expressions
 			return new ConditionExpression(left, ConditionType.OrElse, right);
 		}
 
+		public static JoinExpression Join(ColumnExpression leftColumn, ColumnExpression rightColumn,
+			JoinDirection direction = JoinDirection.Inner)
+		{
+			return new JoinExpression(leftColumn, rightColumn, direction);
+		}
+
 		/// <summary>
 		/// Creates a query expression representing a SELECT query.
 		/// </summary>
@@ -63,18 +69,18 @@ namespace Silk.Data.SQL.Expressions
 		public static SelectExpression Select(
 			QueryExpression[] projection,
 			QueryExpression from = null,
-			QueryExpression[] joins = null,
-			QueryExpression whereConditions = null,
-			QueryExpression havingConditions = null,
-			QueryExpression[] orderConditions = null,
-			QueryExpression[] groupByConditions = null,
+			JoinExpression[] joins = null,
+			QueryExpression where = null,
+			QueryExpression having = null,
+			QueryExpression[] orderBy = null,
+			QueryExpression[] groupBy = null,
 			QueryExpression offset = null,
 			QueryExpression limit = null
 			)
 		{
 			return new SelectExpression(projection, from, joins,
-				whereConditions, havingConditions, orderConditions,
-				groupByConditions, offset, limit);
+				where, having, orderBy,
+				groupBy, offset, limit);
 		}
 
 		/// <summary>
