@@ -48,6 +48,20 @@ namespace Silk.Data.SQL.Queries
 			return null;
 		}
 
+		protected virtual string GetBitwiseOperatorString(BitwiseOperator @operator)
+		{
+			switch (@operator)
+			{
+				case BitwiseOperator.And:
+					return "&";
+				case BitwiseOperator.Or:
+					return "|";
+				case BitwiseOperator.ExclusiveOr:
+					return "^";
+			}
+			return null;
+		}
+
 		protected abstract string QuoteIdentifier(string schemaComponent);
 
 		protected class QueryWriter : QueryExpressionVisitor
@@ -240,6 +254,15 @@ namespace Silk.Data.SQL.Queries
 						Sql.Append(" AND ");
 					else
 						Sql.Append(" OR ");
+				}
+				else if (binaryExpression.BinaryOperationType == BinaryOperation.Bitwise &&
+					queryExpression is BitwiseOperationQueryExpression bitwiseExpression)
+				{
+					var operatorStr = Converter.GetBitwiseOperatorString(bitwiseExpression.Operator);
+					if (operatorStr == null)
+						throw new System.InvalidOperationException($"Unsupported condition operator: {bitwiseExpression.Operator}");
+
+					Sql.Append($" {operatorStr} ");
 				}
 
 				Visit(binaryExpression.Right);
