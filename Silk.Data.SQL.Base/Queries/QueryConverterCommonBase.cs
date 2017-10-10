@@ -265,10 +265,20 @@ namespace Silk.Data.SQL.Queries
 					Sql.Append("JOIN ");
 					Visit(joinExpression.RightColumn.Source);
 					Sql.Append(" ON ");
-					Visit(joinExpression.LeftColumn);
+					VisitPossiblyAliasedColumn(joinExpression.LeftColumn);
 					Sql.Append(" = ");
-					Visit(joinExpression.RightColumn);
+					VisitPossiblyAliasedColumn(joinExpression.RightColumn);
 				}
+			}
+
+			private void VisitPossiblyAliasedColumn(ColumnExpression queryExpression)
+			{
+				if (queryExpression.Source is AliasExpression sourceAliasExpression)
+				{
+					Visit(QueryExpression.Column(queryExpression.ColumnName, QueryExpression.Table(sourceAliasExpression.Identifier.Identifier)));
+					return;
+				}
+				Visit(queryExpression);
 			}
 		}
 	}

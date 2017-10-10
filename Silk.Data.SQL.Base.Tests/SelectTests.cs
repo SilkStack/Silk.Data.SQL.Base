@@ -239,5 +239,34 @@ namespace Silk.Data.SQL.Base.Tests
 			var sqlQuery = _queryConverter.ConvertToQuery(queryExpression);
 			Assert.AreEqual("SELECT [TestTable].[TestColumn1], [TestTable2].[TestColumn2] FROM [TestTable] INNER JOIN [TestTable2] ON [TestTable].[TestColumn1] = [TestTable2].[TestColumn2]", sqlQuery.SqlText);
 		}
+
+		[TestMethod]
+		public void SelectWithMultipleJoins()
+		{
+			var tableExpression = QueryExpression.Table("TestTable");
+			var joinTableExpression = QueryExpression.Table("TestTable2");
+			var joinAliasExpression1 = QueryExpression.Alias(joinTableExpression, "t2");
+			var joinAliasExpression2 = QueryExpression.Alias(joinTableExpression, "t3");
+			var queryExpression = QueryExpression.Select(
+				new[] {
+					QueryExpression.All()
+				},
+				from: tableExpression,
+				joins: new[]
+				{
+					QueryExpression.Join(
+						QueryExpression.Column("TestColumn1", tableExpression),
+						QueryExpression.Column("TestColumn2", joinAliasExpression1)
+						),
+					QueryExpression.Join(
+						QueryExpression.Column("TestColumn1", tableExpression),
+						QueryExpression.Column("TestColumn3", joinAliasExpression2)
+						)
+				}
+				);
+
+			var sqlQuery = _queryConverter.ConvertToQuery(queryExpression);
+			Assert.AreEqual("SELECT * FROM [TestTable] INNER JOIN [TestTable2] AS [t2] ON [TestTable].[TestColumn1] = [t2].[TestColumn2] INNER JOIN [TestTable2] AS [t3] ON [TestTable].[TestColumn1] = [t3].[TestColumn3]", sqlQuery.SqlText);
+		}
 	}
 }
