@@ -62,6 +62,29 @@ namespace Silk.Data.SQL.Queries
 			return null;
 		}
 
+		protected virtual void WriteFunctionToSql(QueryExpression queryExpression)
+		{
+			switch (queryExpression)
+			{
+				case DistinctFunctionExpression distinctExpression:
+					Sql.Append(" DISTINCT ");
+					ExpressionWriter.Visit(distinctExpression.Expression);
+					break;
+				case CountFunctionExpression countExpression:
+					Sql.Append(" COUNT(");
+					if (countExpression.Expression != null)
+						ExpressionWriter.Visit(countExpression.Expression);
+					Sql.Append(") ");
+					break;
+				case RandomFunctionExpression randomExpression:
+					Sql.Append(" RAND(");
+					if (randomExpression.Expression != null)
+						ExpressionWriter.Visit(randomExpression.Expression);
+					Sql.Append(") ");
+					break;
+			}
+		}
+
 		protected abstract string QuoteIdentifier(string schemaComponent);
 
 		protected class QueryWriter : QueryExpressionVisitor
@@ -267,6 +290,11 @@ namespace Silk.Data.SQL.Queries
 
 				Visit(binaryExpression.Right);
 				Sql.Append(")");
+			}
+
+			protected override void VisitFunction(QueryExpression queryExpression)
+			{
+				Converter.WriteFunctionToSql(queryExpression);
 			}
 
 			protected override void VisitJoin(QueryExpression queryExpression)

@@ -35,6 +35,16 @@ namespace Silk.Data.SQL.Expressions
 			return new CountFunctionExpression(expression);
 		}
 
+		public static DistinctFunctionExpression Distinct(QueryExpression expression)
+		{
+			return new DistinctFunctionExpression(expression);
+		}
+
+		public static RandomFunctionExpression Random(QueryExpression expression = null)
+		{
+			return new RandomFunctionExpression(expression);
+		}
+
 		public static AliasExpression Alias(QueryExpression expression, string alias)
 		{
 			return new AliasExpression(expression, alias);

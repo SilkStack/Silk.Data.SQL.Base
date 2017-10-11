@@ -1,10 +1,10 @@
 ﻿namespace Silk.Data.SQL.Expressions
 {
-	public class CountFunctionExpression : DbFunctionQueryExpression
+	public class RandomFunctionExpression : DbFunctionQueryExpression
 	{
 		public QueryExpression Expression { get; }
 
-		public CountFunctionExpression(QueryExpression expression = null)
+		public RandomFunctionExpression(QueryExpression expression = null)
 		{
 			Expression = expression;
 		}

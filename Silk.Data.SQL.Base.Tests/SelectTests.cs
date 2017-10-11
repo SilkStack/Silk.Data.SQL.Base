@@ -268,5 +268,43 @@ namespace Silk.Data.SQL.Base.Tests
 			var sqlQuery = _queryConverter.ConvertToQuery(queryExpression);
 			Assert.AreEqual("SELECT * FROM [TestTable] INNER JOIN [TestTable2] AS [t2] ON [TestTable].[TestColumn1] = [t2].[TestColumn2] INNER JOIN [TestTable2] AS [t3] ON [TestTable].[TestColumn1] = [t3].[TestColumn3]", sqlQuery.SqlText);
 		}
+
+		[TestMethod]
+		public void ComplicatedSelect()
+		{
+			var sourceAliasExpression = QueryExpression.Alias(QueryExpression.Select(
+				new[] { QueryExpression.All() },
+				from: QueryExpression.Table("TestTable")
+				), "source");
+			var joinTableExpression = QueryExpression.Table("TestTable2");
+			var joinAliasExpression1 = QueryExpression.Alias(joinTableExpression, "t2");
+			var joinAliasExpression2 = QueryExpression.Alias(joinTableExpression, "t3");
+			var queryExpression = QueryExpression.Select(
+				new[] {
+					QueryExpression.All(sourceAliasExpression.Identifier),
+					QueryExpression.All(joinAliasExpression1.Identifier)
+				},
+				from: sourceAliasExpression,
+				joins: new[]
+				{
+					QueryExpression.Join(
+						QueryExpression.Column("TestColumn1", sourceAliasExpression),
+						QueryExpression.Column("TestColumn2", joinAliasExpression1)
+						),
+					QueryExpression.Join(
+						QueryExpression.Column("TestColumn1", sourceAliasExpression),
+						QueryExpression.Column("TestColumn3", joinAliasExpression2)
+						)
+				},
+				where: QueryExpression.Compare(QueryExpression.Column("TestColumn3", joinAliasExpression2.Identifier), ComparisonOperator.AreEqual, QueryExpression.Value(1)),
+				orderBy: new[] { QueryExpression.Column("TestColumn2", joinAliasExpression1.Identifier) },
+				groupBy: new[] { QueryExpression.Column("TestColumn1", sourceAliasExpression.Identifier) },
+				offset: QueryExpression.Value(5),
+				limit: QueryExpression.Value(100)
+				);
+
+			var sqlQuery = _queryConverter.ConvertToQuery(queryExpression);
+			Assert.AreEqual("SELECT [source].*, [t2].* FROM (SELECT * FROM [TestTable])  AS [source] INNER JOIN [TestTable2] AS [t2] ON [source].[TestColumn1] = [t2].[TestColumn2] INNER JOIN [TestTable2] AS [t3] ON [source].[TestColumn1] = [t3].[TestColumn3] WHERE ([t3].[TestColumn3] =  @valueParameter1 ) GROUP BY [source].[TestColumn1] ORDER BY [t2].[TestColumn2] LIMIT  @valueParameter2  OFFSET  @valueParameter3 ", sqlQuery.SqlText);
+		}
 	}
 }
