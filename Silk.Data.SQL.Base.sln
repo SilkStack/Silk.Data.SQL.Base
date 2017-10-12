@@ -1,11 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silk.Data.SQL.Base", "Silk.Data.SQL.Base\Silk.Data.SQL.Base.csproj", "{20045007-7061-4186-A478-393A306F1CC6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silk.Data.SQL.Base", "Silk.Data.SQL.Base\Silk.Data.SQL.Base.csproj", "{20045007-7061-4186-A478-393A306F1CC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silk.Data.SQL.Base.Tests", "Silk.Data.SQL.Base.Tests\Silk.Data.SQL.Base.Tests.csproj", "{541082CC-7281-4228-8706-534267775FFE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Silk.Data.SQL.Base.Tests", "Silk.Data.SQL.Base.Tests\Silk.Data.SQL.Base.Tests.csproj", "{541082CC-7281-4228-8706-534267775FFE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A0BD867B-9FF0-4B48-A48E-3B04D02C8DB9}"
+	ProjectSection(SolutionItems) = preProject
+		license.txt = license.txt
+		readme.md = readme.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
