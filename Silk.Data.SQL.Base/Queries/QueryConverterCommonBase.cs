@@ -21,6 +21,7 @@ namespace Silk.Data.SQL.Queries
 		{
 			Sql.Clear();
 			ExpressionWriter.Parameters = null;
+			ExpressionWriter.QueryDepth = 0;
 			ExpressionWriter.Visit(queryExpression);
 
 			return new SqlQuery(ProviderName, Sql.ToString(), ExpressionWriter.Parameters);
@@ -92,6 +93,7 @@ namespace Silk.Data.SQL.Queries
 			protected StringBuilder Sql { get; }
 			public QueryConverterCommonBase Converter { get; }
 			public Dictionary<string,QueryParameter> Parameters { get; set; }
+			public int QueryDepth { get; set; }
 
 			public QueryWriter(StringBuilder sql, QueryConverterCommonBase converter)
 			{
@@ -101,7 +103,7 @@ namespace Silk.Data.SQL.Queries
 
 			protected override void VisitQuery(QueryExpression queryExpression)
 			{
-				var isSubQuery = Sql.Length > 0;
+				var isSubQuery = QueryDepth > 0;
 				if (isSubQuery)
 				{
 					Sql.Append("(");
@@ -110,6 +112,7 @@ namespace Silk.Data.SQL.Queries
 				switch (queryExpression)
 				{
 					case SelectExpression select:
+						QueryDepth++;
 						Sql.Append("SELECT ");
 						VisitExpressionGroup(select.Projection, ExpressionGroupType.Projection);
 						if (select.From != null)
@@ -156,8 +159,10 @@ namespace Silk.Data.SQL.Queries
 							Sql.Append(" OFFSET ");
 							Visit(select.Offset);
 						}
+						QueryDepth--;
 						break;
 					case InsertExpression insert:
+						QueryDepth++;
 						Sql.Append("INSERT INTO ");
 						Visit(insert.Table);
 						VisitExpressionGroup(insert.Columns, ExpressionGroupType.ColumnList);
@@ -168,8 +173,10 @@ namespace Silk.Data.SQL.Queries
 							if (i < insert.RowsExpressions.Length - 1)
 								Sql.Append(", ");
 						}
+						QueryDepth--;
 						break;
 					case UpdateExpression update:
+						QueryDepth++;
 						Sql.Append("UPDATE ");
 						Visit(update.Table);
 						Sql.Append(" SET ");
@@ -179,8 +186,10 @@ namespace Silk.Data.SQL.Queries
 							Sql.Append(" WHERE ");
 							Visit(update.WhereConditions);
 						}
+						QueryDepth--;
 						break;
 					case DeleteExpression delete:
+						QueryDepth++;
 						Sql.Append("DELETE FROM ");
 						Visit(delete.Table);
 						if (delete.WhereConditions != null)
@@ -188,13 +197,21 @@ namespace Silk.Data.SQL.Queries
 							Sql.Append(" WHERE ");
 							Visit(delete.WhereConditions);
 						}
+						QueryDepth--;
 						break;
 					case ExecuteStoredProcedureExpression sprocExec:
+						QueryDepth++;
 						Sql.Append($"EXECUTE {Converter.QuoteIdentifier(sprocExec.StoredProcedureName)} ");
 						if (sprocExec.Arguments != null && sprocExec.Arguments.Length > 0)
 						{
 							VisitExpressionGroup(sprocExec.Arguments, ExpressionGroupType.ProcedureArguments);
 						}
+						QueryDepth--;
+						break;
+					case TransactionExpression transaction:
+						Sql.AppendLine("BEGIN TRANSACTION;");
+						VisitExpressionGroup(transaction.Queries, ExpressionGroupType.Queries);
+						Sql.AppendLine("COMMIT;");
 						break;
 				}
 
@@ -208,6 +225,13 @@ namespace Silk.Data.SQL.Queries
 			{
 				switch (groupType)
 				{
+					case ExpressionGroupType.Queries:
+						foreach (var query in queryExpressions)
+						{
+							Visit(query);
+							Sql.AppendLine(";");
+						}
+						return;
 					case ExpressionGroupType.GroupByClauses:
 					case ExpressionGroupType.OrderByClauses:
 					case ExpressionGroupType.Projection:

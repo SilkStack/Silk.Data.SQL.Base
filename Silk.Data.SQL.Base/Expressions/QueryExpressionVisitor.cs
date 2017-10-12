@@ -87,6 +87,9 @@ namespace Silk.Data.SQL.Expressions
 				case ExecuteStoredProcedureExpression sprocExec:
 					VisitExpressionGroup(sprocExec.Arguments, ExpressionGroupType.ProcedureArguments);
 					break;
+				case TransactionExpression transaction:
+					VisitExpressionGroup(transaction.Queries, ExpressionGroupType.Queries);
+					break;
 			}
 		}
 

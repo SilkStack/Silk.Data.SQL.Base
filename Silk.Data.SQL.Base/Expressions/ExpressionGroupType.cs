@@ -10,5 +10,6 @@
 		RowValues,
 		RowAssignments,
 		ProcedureArguments,
+		Queries
 	}
 }
