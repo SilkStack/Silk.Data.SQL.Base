@@ -84,9 +84,6 @@ namespace Silk.Data.SQL.Expressions
 					Visit(delete.Table);
 					Visit(delete.WhereConditions);
 					break;
-				case ExecuteStoredProcedureExpression sprocExec:
-					VisitExpressionGroup(sprocExec.Arguments, ExpressionGroupType.ProcedureArguments);
-					break;
 			}
 		}
 

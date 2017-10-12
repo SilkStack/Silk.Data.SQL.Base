@@ -189,9 +189,6 @@ namespace Silk.Data.SQL.Queries
 							Visit(delete.WhereConditions);
 						}
 						break;
-					case ExecuteStoredProcedureExpression sprocExec:
-						VisitExpressionGroup(sprocExec.Arguments, ExpressionGroupType.ProcedureArguments);
-						break;
 				}
 
 				if (isSubQuery)

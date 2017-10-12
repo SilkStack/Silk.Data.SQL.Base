@@ -199,18 +199,6 @@ namespace Silk.Data.SQL.Expressions
 		}
 
 		/// <summary>
-		/// Creates a query expression repsenting execution of a stored procedure.
-		/// </summary>
-		/// <param name="storedProcedureName"></param>
-		/// <param name="arguments"></param>
-		/// <returns></returns>
-		public static ExecuteStoredProcedureExpression ExecuteStoredProcedure(string storedProcedureName,
-			params QueryExpression[] arguments)
-		{
-			return new ExecuteStoredProcedureExpression(storedProcedureName, arguments);
-		}
-
-		/// <summary>
 		/// Creates a query expression representing a transaction query.
 		/// </summary>
 		/// <remarks>Nested transaction queries are not supported.</remarks>
