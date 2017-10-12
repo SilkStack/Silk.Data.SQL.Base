@@ -118,7 +118,9 @@ namespace Silk.Data.SQL.Queries
 							Visit(select.From);
 						}
 						if (select.Joins != null && select.Joins.Length > 0)
+						{
 							VisitExpressionGroup(select.Joins, ExpressionGroupType.Joins);
+						}
 						if (select.WhereConditions != null)
 						{
 							Sql.Append(" WHERE ");
