@@ -190,7 +190,11 @@ namespace Silk.Data.SQL.Queries
 						}
 						break;
 					case ExecuteStoredProcedureExpression sprocExec:
-						VisitExpressionGroup(sprocExec.Arguments, ExpressionGroupType.ProcedureArguments);
+						Sql.Append($"EXECUTE {Converter.QuoteIdentifier(sprocExec.StoredProcedureName)} ");
+						if (sprocExec.Arguments != null && sprocExec.Arguments.Length > 0)
+						{
+							VisitExpressionGroup(sprocExec.Arguments, ExpressionGroupType.ProcedureArguments);
+						}
 						break;
 				}
 
@@ -208,6 +212,7 @@ namespace Silk.Data.SQL.Queries
 					case ExpressionGroupType.OrderByClauses:
 					case ExpressionGroupType.Projection:
 					case ExpressionGroupType.RowAssignments:
+					case ExpressionGroupType.ProcedureArguments:
 						{
 							var expressionCount = queryExpressions.Count;
 							var i = 0;
