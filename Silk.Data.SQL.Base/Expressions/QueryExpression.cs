@@ -103,10 +103,9 @@ namespace Silk.Data.SQL.Expressions
 		public static InsertExpression Insert(string tableName, string[] columnNames,
 			params object[][] rowsValues)
 		{
-			var table = Table(tableName);
 			return new InsertExpression(
-				table,
-				columnNames.Select(name => Column(name, table)).ToArray(),
+				Table(tableName),
+				columnNames.Select(name => Column(name)).ToArray(),
 				rowsValues.Select(values => values.Select(value => Value(value)).ToArray()).ToArray()
 				);
 		}
@@ -121,10 +120,9 @@ namespace Silk.Data.SQL.Expressions
 		public static InsertExpression Insert(string tableName, string[] columnNames,
 			params QueryExpression[][] rowsExpressions)
 		{
-			var table = Table(tableName);
 			return new InsertExpression(
-				table,
-				columnNames.Select(name => Column(name, table)).ToArray(),
+				Table(tableName),
+				columnNames.Select(name => Column(name)).ToArray(),
 				rowsExpressions
 				);
 		}

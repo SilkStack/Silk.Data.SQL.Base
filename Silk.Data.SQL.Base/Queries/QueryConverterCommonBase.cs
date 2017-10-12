@@ -156,17 +156,25 @@ namespace Silk.Data.SQL.Queries
 						}
 						break;
 					case InsertExpression insert:
+						Sql.Append("INSERT INTO ");
 						Visit(insert.Table);
 						VisitExpressionGroup(insert.Columns, ExpressionGroupType.ColumnList);
-						foreach (var rowExpressions in insert.RowsExpressions)
-							VisitExpressionGroup(rowExpressions, ExpressionGroupType.RowValues);
+						Sql.Append(" VALUES ");
+						for (var i = 0; i < insert.RowsExpressions.Length; i++)
+						{
+							VisitExpressionGroup(insert.RowsExpressions[i], ExpressionGroupType.RowValues);
+							if (i < insert.RowsExpressions.Length - 1)
+								Sql.Append(", ");
+						}
 						break;
 					case UpdateExpression update:
+						Sql.Append("UPDATE ");
 						Visit(update.Table);
 						VisitExpressionGroup(update.Assignments, ExpressionGroupType.RowAssignments);
 						Visit(update.WhereConditions);
 						break;
 					case DeleteExpression delete:
+						Sql.Append("DELETE ");
 						Visit(delete.Table);
 						Visit(delete.WhereConditions);
 						break;
@@ -198,6 +206,27 @@ namespace Silk.Data.SQL.Queries
 								if (i < expressionCount)
 									Sql.Append(", ");
 							}
+						}
+						return;
+					case ExpressionGroupType.RowValues:
+					case ExpressionGroupType.ColumnList:
+						{
+							Sql.Append(" (");
+							var expressionCount = queryExpressions.Count;
+							var i = 0;
+							foreach (var expression in queryExpressions)
+							{
+								i++;
+								Visit(expression);
+								if (i < expressionCount)
+									Sql.Append(", ");
+							}
+							Sql.Append(") ");
+						}
+						return;
+					case ExpressionGroupType.RowAssignments:
+						{
+
 						}
 						return;
 				}
