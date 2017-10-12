@@ -170,13 +170,22 @@ namespace Silk.Data.SQL.Queries
 					case UpdateExpression update:
 						Sql.Append("UPDATE ");
 						Visit(update.Table);
+						Sql.Append(" SET ");
 						VisitExpressionGroup(update.Assignments, ExpressionGroupType.RowAssignments);
-						Visit(update.WhereConditions);
+						if (update.WhereConditions != null)
+						{
+							Sql.Append(" WHERE ");
+							Visit(update.WhereConditions);
+						}
 						break;
 					case DeleteExpression delete:
-						Sql.Append("DELETE ");
+						Sql.Append("DELETE FROM ");
 						Visit(delete.Table);
-						Visit(delete.WhereConditions);
+						if (delete.WhereConditions != null)
+						{
+							Sql.Append(" WHERE ");
+							Visit(delete.WhereConditions);
+						}
 						break;
 					case ExecuteStoredProcedureExpression sprocExec:
 						VisitExpressionGroup(sprocExec.Arguments, ExpressionGroupType.ProcedureArguments);
@@ -196,6 +205,7 @@ namespace Silk.Data.SQL.Queries
 					case ExpressionGroupType.GroupByClauses:
 					case ExpressionGroupType.OrderByClauses:
 					case ExpressionGroupType.Projection:
+					case ExpressionGroupType.RowAssignments:
 						{
 							var expressionCount = queryExpressions.Count;
 							var i = 0;
@@ -222,11 +232,6 @@ namespace Silk.Data.SQL.Queries
 									Sql.Append(", ");
 							}
 							Sql.Append(") ");
-						}
-						return;
-					case ExpressionGroupType.RowAssignments:
-						{
-
 						}
 						return;
 				}
@@ -348,6 +353,16 @@ namespace Silk.Data.SQL.Queries
 					VisitPossiblyAliasedColumn(joinExpression.LeftColumn);
 					Sql.Append(" = ");
 					VisitPossiblyAliasedColumn(joinExpression.RightColumn);
+				}
+			}
+
+			protected override void VisitAssignment(QueryExpression queryExpression)
+			{
+				if (queryExpression is AssignColumnExpression assignmentExpression)
+				{
+					Visit(assignmentExpression.Column);
+					Sql.Append(" = ");
+					Visit(assignmentExpression.Expression);
 				}
 			}
 

@@ -5,9 +5,9 @@
 		public override ExpressionNodeType NodeType => ExpressionNodeType.Query;
 
 		public new TableExpression Table { get; }
-		public ComparisonExpression WhereConditions { get; }
+		public QueryExpression WhereConditions { get; }
 
-		public DeleteExpression(TableExpression table, ComparisonExpression whereConditions)
+		public DeleteExpression(TableExpression table, QueryExpression whereConditions)
 		{
 			Table = table;
 			WhereConditions = whereConditions;

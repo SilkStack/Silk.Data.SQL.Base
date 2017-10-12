@@ -5,11 +5,11 @@
 		public override ExpressionNodeType NodeType => ExpressionNodeType.Query;
 
 		public new TableExpression Table { get; }
-		public QueryExpression[] Assignments { get; }
-		public ComparisonExpression WhereConditions { get; }
+		public AssignColumnExpression[] Assignments { get; }
+		public QueryExpression WhereConditions { get; }
 
-		public UpdateExpression(TableExpression table, QueryExpression[] assignments,
-			ComparisonExpression whereConditions)
+		public UpdateExpression(TableExpression table, AssignColumnExpression[] assignments,
+			QueryExpression whereConditions)
 		{
 			Table = table;
 			Assignments = assignments;

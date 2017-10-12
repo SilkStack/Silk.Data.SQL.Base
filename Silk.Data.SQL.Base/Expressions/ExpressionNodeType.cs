@@ -8,6 +8,7 @@
 		Value,
 		DbFunction,
 		Alias,
-		Join
+		Join,
+		Assignment
 	}
 }

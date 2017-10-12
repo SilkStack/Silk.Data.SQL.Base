@@ -10,6 +10,21 @@ namespace Silk.Data.SQL.Expressions
 		/// </summary>
 		public abstract ExpressionNodeType NodeType { get; }
 
+		public static AssignColumnExpression Assign(string columnName, object value)
+		{
+			return Assign(columnName, Value(value));
+		}
+
+		public static AssignColumnExpression Assign(string columnName, QueryExpression expression)
+		{
+			return Assign(Column(columnName), expression);
+		}
+
+		public static AssignColumnExpression Assign(ColumnExpression column, QueryExpression expression)
+		{
+			return new AssignColumnExpression(column, expression);
+		}
+
 		public static ColumnExpression All(QueryExpression source = null)
 		{
 			return Column("*", source);
@@ -165,8 +180,8 @@ namespace Silk.Data.SQL.Expressions
 		/// <param name="assignments"></param>
 		/// <returns></returns>
 		public static UpdateExpression Update(TableExpression table,
-			ComparisonExpression where = null,
-			params QueryExpression[] assignments)
+			QueryExpression where = null,
+			params AssignColumnExpression[] assignments)
 		{
 			return new UpdateExpression(table, assignments, where);
 		}
@@ -178,7 +193,7 @@ namespace Silk.Data.SQL.Expressions
 		/// <param name="whereConditions"></param>
 		/// <returns></returns>
 		public static DeleteExpression Delete(TableExpression table,
-			ComparisonExpression whereConditions = null)
+			QueryExpression whereConditions = null)
 		{
 			return new DeleteExpression(table, whereConditions);
 		}

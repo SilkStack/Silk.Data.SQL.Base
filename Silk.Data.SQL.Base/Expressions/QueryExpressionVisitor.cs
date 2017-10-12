@@ -32,6 +32,9 @@ namespace Silk.Data.SQL.Expressions
 				case ExpressionNodeType.Join:
 					VisitJoin(queryExpression);
 					break;
+				case ExpressionNodeType.Assignment:
+					VisitAssignment(queryExpression);
+					break;
 			}
 		}
 
@@ -123,6 +126,10 @@ namespace Silk.Data.SQL.Expressions
 				Visit(joinExpression.LeftColumn);
 				Visit(joinExpression.RightColumn);
 			}
+		}
+
+		protected virtual void VisitAssignment(QueryExpression queryExpression)
+		{
 		}
 	}
 }
