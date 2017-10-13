@@ -67,6 +67,13 @@ namespace Silk.Data.SQL.Queries
 		{
 			switch (queryExpression)
 			{
+				case TableExistsVirtualFunctionExpression tableExistsExpression:
+					/*
+					 * This is here to document the need to implement this "virtual" function.
+					 * Providers should write a complete query that returns 1 if the table exists,
+					 * non-1 or no rows if the table doesn't exist.
+					 */
+					break;
 				case DistinctFunctionExpression distinctExpression:
 					Sql.Append(" DISTINCT ");
 					ExpressionWriter.Visit(distinctExpression.Expression);

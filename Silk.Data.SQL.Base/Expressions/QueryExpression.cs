@@ -60,6 +60,16 @@ namespace Silk.Data.SQL.Expressions
 			return new RandomFunctionExpression(expression);
 		}
 
+		public static TableExistsVirtualFunctionExpression TableExists(string tableName)
+		{
+			return TableExists(Table(tableName));
+		}
+
+		public static TableExistsVirtualFunctionExpression TableExists(TableExpression table)
+		{
+			return new TableExistsVirtualFunctionExpression(table);
+		}
+
 		public static AliasExpression Alias(QueryExpression expression, string alias)
 		{
 			return new AliasExpression(expression, alias);
