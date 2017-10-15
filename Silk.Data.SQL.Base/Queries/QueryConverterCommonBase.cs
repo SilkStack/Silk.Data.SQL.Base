@@ -241,6 +241,12 @@ namespace Silk.Data.SQL.Queries
 						}
 						Sql.Append(")");
 						break;
+					case DropExpression drop:
+						Sql.Append("DROP ");
+						if (drop.Expression is TableExpression)
+							Sql.Append("TABLE ");
+						Visit(drop.Expression);
+						break;
 				}
 
 				if (isSubQuery)

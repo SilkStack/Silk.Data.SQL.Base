@@ -96,6 +96,9 @@ namespace Silk.Data.SQL.Expressions
 				case CreateTableExpression create:
 					VisitExpressionGroup(create.ColumnDefinitions, ExpressionGroupType.ColumnDefinitions);
 					break;
+				case DropExpression drop:
+					Visit(drop.Expression);
+					break;
 			}
 		}
 

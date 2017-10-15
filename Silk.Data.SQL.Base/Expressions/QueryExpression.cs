@@ -36,6 +36,11 @@ namespace Silk.Data.SQL.Expressions
 			return CreateTable(tableName, (IEnumerable<ColumnDefinitionExpression>)columnDefinitions);
 		}
 
+		public static DropExpression DropTable(string tableName)
+		{
+			return new DropExpression(Table(tableName));
+		}
+
 		public static AssignColumnExpression Assign(string columnName, object value)
 		{
 			return Assign(columnName, Value(value));
