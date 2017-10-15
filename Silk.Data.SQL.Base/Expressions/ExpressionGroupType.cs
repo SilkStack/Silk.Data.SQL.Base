@@ -10,6 +10,7 @@
 		RowValues,
 		RowAssignments,
 		ProcedureArguments,
-		Queries
+		Queries,
+		ColumnDefinitions
 	}
 }

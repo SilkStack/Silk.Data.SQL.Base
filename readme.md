@@ -2,6 +2,19 @@
 
 Low-level library for creating SQL queries and statements. This API is not really intended to be used in main application logic but used as an implementation detail of SQL APIs.
 
+The API surface exposed by this library is intended to be as generic and general purpose as possible. A cross-section of features available in most modern SQL databases exposed in this library while server specific libraries (called providers) can provide more server specific features and functionality.
+
+## Goals
+
+The main purpose of this library is to enable libraries to operate on SQL data without being bound to a specific database provider.
+
+My personal goal is to support as much functionality that is exposed across the following database servers as possible and support as many varied SQL use cases as possible on these platforms:
+
+* Microsoft SQL Server (SQL Server, Express and Azure)
+* Postgresql
+* SQLite 3
+* MySQL/MariaDB
+
 ## Usage
 
 ### Provider
@@ -64,6 +77,23 @@ Build DELETE statements using `QueryExpression.Delete`.
 Execute multiple statements in a transaction using `QueryExpression.Transaction`.
 
     var transactionExpression = QueryExpression.Transaction(insertExpression, updateExpression);
+
+# Data Storage Types
+
+The following common SQL storage types are exposed:
+
+* Bit	- A `0`, `1` or `NULL` value.
+* TinyInt - 1 byte integer.
+* SmallInt - 2 byte integer.
+* Int - 4 byte integer.
+* BigInt - 8 byte integer.
+* Float - Approximate number type, accepts precision and scale options.
+* Decimal - Fixed precision numeric type.
+* Date
+* Time
+* DateTime
+* Text - Unicode text, accepts a max length option to make (N)VARCHAR(*length*).
+* Binary - Variable length binary storage, requires a max length option.
 
 # Planned Features
 

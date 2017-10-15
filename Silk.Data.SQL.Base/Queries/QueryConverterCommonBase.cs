@@ -1,12 +1,14 @@
 ﻿using Silk.Data.SQL.Expressions;
 using System.Text;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Silk.Data.SQL.Queries
 {
 	public abstract class QueryConverterCommonBase : IQueryConverter
 	{
 		protected abstract string ProviderName { get; }
+		protected abstract string AutoIncrementSql { get; }
 
 		protected StringBuilder Sql { get; }
 		protected QueryWriter ExpressionWriter { get; }
@@ -95,6 +97,8 @@ namespace Silk.Data.SQL.Queries
 
 		protected abstract string QuoteIdentifier(string schemaComponent);
 
+		protected abstract string GetDbDatatype(SqlDataType sqlDataType);
+
 		protected class QueryWriter : QueryExpressionVisitor
 		{
 			protected StringBuilder Sql { get; }
@@ -172,11 +176,15 @@ namespace Silk.Data.SQL.Queries
 						QueryDepth++;
 						Sql.Append("INSERT INTO ");
 						Visit(insert.Table);
+						Sql.Append(" (");
 						VisitExpressionGroup(insert.Columns, ExpressionGroupType.ColumnList);
+						Sql.Append(") ");
 						Sql.Append(" VALUES ");
 						for (var i = 0; i < insert.RowsExpressions.Length; i++)
 						{
+							Sql.Append(" (");
 							VisitExpressionGroup(insert.RowsExpressions[i], ExpressionGroupType.RowValues);
+							Sql.Append(") ");
 							if (i < insert.RowsExpressions.Length - 1)
 								Sql.Append(", ");
 						}
@@ -220,6 +228,19 @@ namespace Silk.Data.SQL.Queries
 						VisitExpressionGroup(transaction.Queries, ExpressionGroupType.Queries);
 						Sql.AppendLine("COMMIT;");
 						break;
+					case CreateTableExpression create:
+						Sql.Append($"CREATE TABLE {Converter.QuoteIdentifier(create.TableName)} (");
+						VisitExpressionGroup(create.ColumnDefinitions, ExpressionGroupType.ColumnDefinitions);
+						var primaryKeyColumnNames = create.ColumnDefinitions
+								.Where(q => q.IsPrimaryKey)
+								.Select(q => Converter.QuoteIdentifier(q.ColumnName))
+								.ToArray();
+						if (primaryKeyColumnNames.Length > 0)
+						{
+							Sql.Append($", CONSTRAINT {Converter.QuoteIdentifier("PK")} PRIMARY KEY ({string.Join(",", primaryKeyColumnNames)})");
+						}
+						Sql.Append(")");
+						break;
 				}
 
 				if (isSubQuery)
@@ -239,6 +260,9 @@ namespace Silk.Data.SQL.Queries
 							Sql.AppendLine(";");
 						}
 						return;
+					case ExpressionGroupType.RowValues:
+					case ExpressionGroupType.ColumnList:
+					case ExpressionGroupType.ColumnDefinitions:
 					case ExpressionGroupType.GroupByClauses:
 					case ExpressionGroupType.OrderByClauses:
 					case ExpressionGroupType.Projection:
@@ -254,22 +278,6 @@ namespace Silk.Data.SQL.Queries
 								if (i < expressionCount)
 									Sql.Append(", ");
 							}
-						}
-						return;
-					case ExpressionGroupType.RowValues:
-					case ExpressionGroupType.ColumnList:
-						{
-							Sql.Append(" (");
-							var expressionCount = queryExpressions.Count;
-							var i = 0;
-							foreach (var expression in queryExpressions)
-							{
-								i++;
-								Visit(expression);
-								if (i < expressionCount)
-									Sql.Append(", ");
-							}
-							Sql.Append(") ");
 						}
 						return;
 				}
@@ -401,6 +409,24 @@ namespace Silk.Data.SQL.Queries
 					Visit(assignmentExpression.Column);
 					Sql.Append(" = ");
 					Visit(assignmentExpression.Expression);
+				}
+			}
+
+			protected override void VisitColumnDefinition(QueryExpression queryExpression)
+			{
+				if (queryExpression is ColumnDefinitionExpression columnDefinitionExpression)
+				{
+					Sql.Append(Converter.QuoteIdentifier(columnDefinitionExpression.ColumnName));
+					Sql.Append(" ");
+					Sql.Append(Converter.GetDbDatatype(columnDefinitionExpression.DataType));
+					if (!columnDefinitionExpression.IsNullable)
+					{
+						Sql.Append(" NOT NULL");
+					}
+					if (columnDefinitionExpression.IsAutoIncrement)
+					{
+						Sql.Append($" {Converter.AutoIncrementSql}");
+					}
 				}
 			}
 

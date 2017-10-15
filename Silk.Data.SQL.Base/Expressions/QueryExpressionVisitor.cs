@@ -35,6 +35,9 @@ namespace Silk.Data.SQL.Expressions
 				case ExpressionNodeType.Assignment:
 					VisitAssignment(queryExpression);
 					break;
+				case ExpressionNodeType.ColumnDefinition:
+					VisitColumnDefinition(queryExpression);
+					break;
 			}
 		}
 
@@ -90,6 +93,9 @@ namespace Silk.Data.SQL.Expressions
 				case TransactionExpression transaction:
 					VisitExpressionGroup(transaction.Queries, ExpressionGroupType.Queries);
 					break;
+				case CreateTableExpression create:
+					VisitExpressionGroup(create.ColumnDefinitions, ExpressionGroupType.ColumnDefinitions);
+					break;
 			}
 		}
 
@@ -132,6 +138,10 @@ namespace Silk.Data.SQL.Expressions
 		}
 
 		protected virtual void VisitAssignment(QueryExpression queryExpression)
+		{
+		}
+
+		protected virtual void VisitColumnDefinition(QueryExpression queryExpression)
 		{
 		}
 	}

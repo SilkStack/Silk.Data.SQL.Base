@@ -9,6 +9,7 @@
 		DbFunction,
 		Alias,
 		Join,
-		Assignment
+		Assignment,
+		ColumnDefinition
 	}
 }

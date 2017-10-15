@@ -5,10 +5,36 @@ namespace Silk.Data.SQL.Expressions
 {
 	public abstract class QueryExpression
 	{
+		private static SqlBaseType[] _nullableTypes = new[]
+		{
+			SqlBaseType.Binary,
+			SqlBaseType.Text
+		};
+
 		/// <summary>
 		/// Gets the node type of the query expression.
 		/// </summary>
 		public abstract ExpressionNodeType NodeType { get; }
+
+		public static ColumnDefinitionExpression DefineColumn(string columnName, SqlDataType dataType,
+			bool? isNullable = null, bool isAutoIncrement = false, bool isPrimaryKey = false)
+		{
+			if (isNullable == null)
+				isNullable = _nullableTypes.Contains(dataType.BaseType);
+			if (isPrimaryKey)
+				isNullable = false;
+			return new ColumnDefinitionExpression(columnName, dataType, isNullable.Value, isAutoIncrement, isPrimaryKey);
+		}
+
+		public static CreateTableExpression CreateTable(string tableName, IEnumerable<ColumnDefinitionExpression> columnDefinitions)
+		{
+			return new CreateTableExpression(tableName, columnDefinitions.ToArray());
+		}
+
+		public static CreateTableExpression CreateTable(string tableName, params ColumnDefinitionExpression[] columnDefinitions)
+		{
+			return CreateTable(tableName, (IEnumerable<ColumnDefinitionExpression>)columnDefinitions);
+		}
 
 		public static AssignColumnExpression Assign(string columnName, object value)
 		{
