@@ -18,7 +18,7 @@ namespace Silk.Data.SQL.Providers
 		{
 			if (DbConnection.State != ConnectionState.Open)
 				return DbConnection.OpenAsync();
-			return Task.CompletedTask;
+			return Task.FromResult(true);
 		}
 
 		protected virtual void EnsureOpen()
