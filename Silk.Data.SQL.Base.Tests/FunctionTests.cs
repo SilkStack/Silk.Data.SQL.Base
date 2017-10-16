@@ -45,7 +45,7 @@ namespace Silk.Data.SQL.Base.Tests
 				QueryExpression.Select(new[] {
 					QueryExpression.Random()
 				}));
-			Assert.AreEqual("SELECT  RANDOM() ", sqlQuery.SqlText);
+			Assert.AreEqual("SELECT  RANDOM()", sqlQuery.SqlText);
 		}
 	}
 }
