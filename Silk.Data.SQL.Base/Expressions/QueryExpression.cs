@@ -76,6 +76,11 @@ namespace Silk.Data.SQL.Expressions
 			return new ValueExpression(value);
 		}
 
+		public static LastInsertIdFunctionExpression LastInsertIdFunction()
+		{
+			return new LastInsertIdFunctionExpression();
+		}
+
 		public static CountFunctionExpression CountFunction(QueryExpression expression = null)
 		{
 			return new CountFunctionExpression(expression);
