@@ -16,6 +16,11 @@ namespace Silk.Data.SQL.Expressions
 		/// </summary>
 		public abstract ExpressionNodeType NodeType { get; }
 
+		public static DescendingExpression Descending(QueryExpression expression)
+		{
+			return new DescendingExpression(expression);
+		}
+
 		public static ColumnDefinitionExpression DefineColumn(string columnName, SqlDataType dataType,
 			bool? isNullable = null, bool isAutoIncrement = false, bool isPrimaryKey = false)
 		{

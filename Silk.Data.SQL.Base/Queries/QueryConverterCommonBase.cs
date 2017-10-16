@@ -415,6 +415,15 @@ namespace Silk.Data.SQL.Queries
 				}
 			}
 
+			protected override void VisitModifier(QueryExpression queryExpression)
+			{
+				if (queryExpression is DescendingExpression descendingExpression)
+				{
+					Visit(descendingExpression.Expression);
+					Sql.Append(" DESC ");
+				}
+			}
+
 			protected override void VisitColumnDefinition(QueryExpression queryExpression)
 			{
 				if (queryExpression is ColumnDefinitionExpression columnDefinitionExpression)

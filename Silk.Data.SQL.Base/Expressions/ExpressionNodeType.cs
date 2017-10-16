@@ -10,6 +10,7 @@
 		Alias,
 		Join,
 		Assignment,
-		ColumnDefinition
+		ColumnDefinition,
+		Modifier
 	}
 }

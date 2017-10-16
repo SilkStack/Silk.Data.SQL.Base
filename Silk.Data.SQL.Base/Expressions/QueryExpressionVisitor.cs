@@ -38,6 +38,9 @@ namespace Silk.Data.SQL.Expressions
 				case ExpressionNodeType.ColumnDefinition:
 					VisitColumnDefinition(queryExpression);
 					break;
+				case ExpressionNodeType.Modifier:
+					VisitModifier(queryExpression);
+					break;
 			}
 		}
 
@@ -146,6 +149,14 @@ namespace Silk.Data.SQL.Expressions
 
 		protected virtual void VisitColumnDefinition(QueryExpression queryExpression)
 		{
+		}
+
+		protected virtual void VisitModifier(QueryExpression queryExpression)
+		{
+			if (queryExpression is DescendingExpression descendingExpression)
+			{
+				Visit(descendingExpression.Expression);
+			}
 		}
 	}
 }
