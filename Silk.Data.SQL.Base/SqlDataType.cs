@@ -37,6 +37,7 @@ namespace Silk.Data.SQL
 		DateTime,
 		Text,
 		Binary,
+		Guid
 	}
 
 	public class SqlDataType
@@ -61,7 +62,8 @@ namespace Silk.Data.SQL
 				{ SqlBaseType.Date, new SqlDataType(SqlBaseType.Date) },
 				{ SqlBaseType.Time, new SqlDataType(SqlBaseType.Time) },
 				{ SqlBaseType.DateTime, new SqlDataType(SqlBaseType.DateTime) },
-				{ SqlBaseType.Text, new SqlDataType(SqlBaseType.Text) }
+				{ SqlBaseType.Text, new SqlDataType(SqlBaseType.Text) },
+				{ SqlBaseType.Guid, new SqlDataType(SqlBaseType.Guid) }
 			};
 
 		public const int FLOAT_MAX_PRECISION = 24;
@@ -75,6 +77,7 @@ namespace Silk.Data.SQL
 		public static SqlDataType Date() => _staticDataTypes[SqlBaseType.Date];
 		public static SqlDataType Time() => _staticDataTypes[SqlBaseType.Time];
 		public static SqlDataType DateTime() => _staticDataTypes[SqlBaseType.DateTime];
+		public static SqlDataType Guid() => _staticDataTypes[SqlBaseType.Guid];
 		public static SqlDataType Text() => _staticDataTypes[SqlBaseType.Text];
 		public static SqlDataType Text(int maxLength) => new SqlDataType(SqlBaseType.Text, maxLength);
 		public static SqlDataType Binary(int maxLength) => new SqlDataType(SqlBaseType.Binary, maxLength);
