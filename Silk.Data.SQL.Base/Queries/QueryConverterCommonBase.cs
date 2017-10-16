@@ -11,7 +11,7 @@ namespace Silk.Data.SQL.Queries
 		protected abstract string AutoIncrementSql { get; }
 
 		protected StringBuilder Sql { get; }
-		protected QueryWriter ExpressionWriter { get; }
+		protected QueryWriter ExpressionWriter { get; protected set; }
 
 		public QueryConverterCommonBase()
 		{
