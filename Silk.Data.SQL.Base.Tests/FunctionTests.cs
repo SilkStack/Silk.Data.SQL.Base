@@ -47,15 +47,5 @@ namespace Silk.Data.SQL.Base.Tests
 				}));
 			Assert.AreEqual("SELECT  RAND() ", sqlQuery.SqlText);
 		}
-
-		[TestMethod]
-		public void RandomWithParameterFunction()
-		{
-			var sqlQuery = _queryConverter.ConvertToQuery(
-				QueryExpression.Select(new[] {
-					QueryExpression.Random(QueryExpression.Value(1))
-				}));
-			Assert.AreEqual("SELECT  RAND( @valueParameter1 ) ", sqlQuery.SqlText);
-		}
 	}
 }
