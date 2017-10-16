@@ -87,10 +87,7 @@ namespace Silk.Data.SQL.Queries
 					Sql.Append(") ");
 					break;
 				case RandomFunctionExpression randomExpression:
-					Sql.Append(" RAND(");
-					if (randomExpression.Expression != null)
-						ExpressionWriter.Visit(randomExpression.Expression);
-					Sql.Append(") ");
+					Sql.Append(" RANDOM()");
 					break;
 			}
 		}

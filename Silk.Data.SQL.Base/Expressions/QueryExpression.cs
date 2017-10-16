@@ -91,9 +91,9 @@ namespace Silk.Data.SQL.Expressions
 			return new DistinctFunctionExpression(expression);
 		}
 
-		public static RandomFunctionExpression Random(QueryExpression expression = null)
+		public static RandomFunctionExpression Random()
 		{
-			return new RandomFunctionExpression(expression);
+			return new RandomFunctionExpression();
 		}
 
 		public static TableExistsVirtualFunctionExpression TableExists(string tableName)
