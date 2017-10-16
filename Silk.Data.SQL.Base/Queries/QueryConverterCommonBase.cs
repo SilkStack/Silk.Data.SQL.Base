@@ -8,10 +8,10 @@ namespace Silk.Data.SQL.Queries
 	public abstract class QueryConverterCommonBase : IQueryConverter
 	{
 		protected abstract string ProviderName { get; }
-		protected abstract string AutoIncrementSql { get; set; }
+		protected abstract string AutoIncrementSql { get; }
 
 		protected StringBuilder Sql { get; }
-		protected QueryWriter ExpressionWriter { get; }
+		protected QueryWriter ExpressionWriter { get; set; }
 
 		public QueryConverterCommonBase()
 		{
