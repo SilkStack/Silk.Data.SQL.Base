@@ -90,5 +90,8 @@ namespace Silk.Data.SQL.Queries
 
 		public Task<bool> ReadAsync()
 			=> _reader.ReadAsync();
+
+		public int GetOrdinal(string name)
+			=> _reader.GetOrdinal(name);
 	}
 }
