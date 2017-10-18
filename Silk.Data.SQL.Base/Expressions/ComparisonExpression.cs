@@ -8,7 +8,8 @@
 		LessThan,
 		GreaterThanOrEqualTo,
 		LessThanOrEqualTo,
-		Like
+		Like,
+		None
 	}
 
 	public class ComparisonExpression : BinaryQueryExpression

@@ -81,6 +81,16 @@ namespace Silk.Data.SQL.Expressions
 			return new ValueExpression(value);
 		}
 
+		public static InFunctionExpression InFunction(object[] values)
+		{
+			return InFunction(values.Select(value => new ValueExpression(value)).ToArray());
+		}
+
+		public static InFunctionExpression InFunction(params QueryExpression[] expressions)
+		{
+			return new InFunctionExpression(expressions);
+		}
+
 		public static LastInsertIdFunctionExpression LastInsertIdFunction()
 		{
 			return new LastInsertIdFunctionExpression();

@@ -33,6 +33,8 @@ namespace Silk.Data.SQL.Queries
 		{
 			switch (@operator)
 			{
+				case ComparisonOperator.None:
+					return "";
 				case ComparisonOperator.AreEqual:
 					return "=";
 				case ComparisonOperator.AreNotEqual:
@@ -75,6 +77,16 @@ namespace Silk.Data.SQL.Queries
 					 * Providers should write a complete query that returns 1 if the table exists,
 					 * non-1 or no rows if the table doesn't exist.
 					 */
+					break;
+				case InFunctionExpression inExpression:
+					Sql.Append(" IN (");
+					for (var i = 0; i < inExpression.Expressions.Length; i++)
+					{
+						ExpressionWriter.Visit(inExpression.Expressions[i]);
+						if (i < inExpression.Expressions.Length - 1)
+							Sql.Append(", ");
+					}
+					Sql.Append(") ");
 					break;
 				case DistinctFunctionExpression distinctExpression:
 					Sql.Append(" DISTINCT ");
