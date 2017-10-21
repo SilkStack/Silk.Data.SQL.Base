@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Silk.Data.SQL.Expressions;
 using System.Data;
 using Silk.Data.SQL.Queries;
+using System;
 
 namespace Silk.Data.SQL.Providers
 {
@@ -43,7 +44,10 @@ namespace Silk.Data.SQL.Providers
 				{
 					var parameter = command.CreateParameter();
 					parameter.ParameterName = $"@{kvp.Key}";
-					parameter.Value = kvp.Value.Value;
+					if (kvp.Value.Value == null)
+						parameter.Value = DBNull.Value;
+					else
+						parameter.Value = kvp.Value.Value;
 					command.Parameters.Add(parameter);
 				}
 			}
