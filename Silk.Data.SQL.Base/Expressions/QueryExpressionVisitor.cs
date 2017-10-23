@@ -41,6 +41,12 @@ namespace Silk.Data.SQL.Expressions
 				case ExpressionNodeType.Modifier:
 					VisitModifier(queryExpression);
 					break;
+				case ExpressionNodeType.Extension:
+					if (queryExpression is IExtensionExpression extension)
+					{
+						extension.Visit(this);
+					}
+					break;
 			}
 		}
 

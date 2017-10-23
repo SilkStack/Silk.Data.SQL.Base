@@ -11,6 +11,7 @@
 		Join,
 		Assignment,
 		ColumnDefinition,
-		Modifier
+		Modifier,
+		Extension
 	}
 }
