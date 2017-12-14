@@ -59,5 +59,29 @@ namespace Silk.Data.SQL.Providers
 		{
 			return _dataCommandCreateor.ConvertExpressionToQuery(queryExpression);
 		}
+
+		protected override int ExecuteNonQuery(SqlQuery sqlQuery)
+		{
+			HasOutstandingCommits = true;
+			return base.ExecuteNonQuery(sqlQuery);
+		}
+
+		protected override Task<int> ExecuteNonQueryAsync(SqlQuery sqlQuery)
+		{
+			HasOutstandingCommits = true;
+			return base.ExecuteNonQueryAsync(sqlQuery);
+		}
+
+		protected override QueryResult ExecuteReader(SqlQuery sqlQuery)
+		{
+			HasOutstandingCommits = true;
+			return base.ExecuteReader(sqlQuery);
+		}
+
+		protected override Task<QueryResult> ExecuteReaderAsync(SqlQuery sqlQuery)
+		{
+			HasOutstandingCommits = true;
+			return base.ExecuteReaderAsync(sqlQuery);
+		}
 	}
 }
