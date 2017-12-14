@@ -7,34 +7,32 @@ using System;
 
 namespace Silk.Data.SQL.Providers
 {
-	public abstract class DataProviderCommonBase : IDataProvider
+	public abstract class DataProviderCommonBase : QueryExecutorBase, IDataProvider, IDataCommandCreator
 	{
-		public abstract string ProviderName { get; }
-
 		protected abstract DbConnection DbConnection { get; }
 
 		protected abstract IQueryConverter CreateQueryConverter();
 
-		protected virtual Task EnsureOpenAsync()
+		protected override Task EnsureOpenAsync()
 		{
 			if (DbConnection.State != ConnectionState.Open)
 				return DbConnection.OpenAsync();
 			return Task.FromResult(true);
 		}
 
-		protected virtual void EnsureOpen()
+		protected override void EnsureOpen()
 		{
 			if (DbConnection.State != ConnectionState.Open)
 				DbConnection.Open();
 		}
 
-		protected virtual SqlQuery ConvertExpressionToQuery(QueryExpression queryExpression)
+		protected override SqlQuery ConvertExpressionToQuery(QueryExpression queryExpression)
 		{
 			return CreateQueryConverter()
 				.ConvertToQuery(queryExpression);
 		}
 
-		protected virtual DbCommand CreateCommand(SqlQuery sqlQuery)
+		protected override DbCommand CreateCommand(SqlQuery sqlQuery)
 		{
 			var command = DbConnection.CreateCommand();
 			command.CommandText = sqlQuery.SqlText;
@@ -54,53 +52,12 @@ namespace Silk.Data.SQL.Providers
 			return command;
 		}
 
-		protected virtual int ExecuteNonQuery(SqlQuery sqlQuery)
+		DbCommand IDataCommandCreator.CreateCommand(SqlQuery sqlQuery)
 		{
-			EnsureOpen();
-			using (var command = CreateCommand(sqlQuery))
-			{
-				return command.ExecuteNonQuery();
-			}
+			return CreateCommand(sqlQuery);
 		}
 
-		protected virtual async Task<int> ExecuteNonQueryAsync(SqlQuery sqlQuery)
-		{
-			await EnsureOpenAsync()
-				.ConfigureAwait(false);
-			using (var command = CreateCommand(sqlQuery))
-			{
-				return await command.ExecuteNonQueryAsync()
-					.ConfigureAwait(false);
-			}
-		}
-
-		protected virtual QueryResult ExecuteReader(SqlQuery sqlQuery)
-		{
-			EnsureOpen();
-			var command = CreateCommand(sqlQuery);
-			return new QueryResult(command, command.ExecuteReader());
-		}
-
-		protected virtual async Task<QueryResult> ExecuteReaderAsync(SqlQuery sqlQuery)
-		{
-			await EnsureOpenAsync()
-				.ConfigureAwait(false);
-			var command = CreateCommand(sqlQuery);
-			return new QueryResult(command, await command.ExecuteReaderAsync()
-				.ConfigureAwait(false));
-		}
-
-		public int ExecuteNonQuery(QueryExpression queryExpression)
-		{
-			return ExecuteNonQuery(ConvertExpressionToQuery(queryExpression));
-		}
-
-		public Task<int> ExecuteNonQueryAsync(QueryExpression queryExpression)
-		{
-			return ExecuteNonQueryAsync(ConvertExpressionToQuery(queryExpression));
-		}
-
-		public virtual void Dispose()
+		public override void Dispose()
 		{
 			if (DbConnection != null)
 			{
@@ -108,14 +65,23 @@ namespace Silk.Data.SQL.Providers
 			}
 		}
 
-		public QueryResult ExecuteReader(QueryExpression queryExpression)
+		public Transaction CreateTransaction()
 		{
-			return ExecuteReader(ConvertExpressionToQuery(queryExpression));
+			EnsureOpen();
+			var dbTransaction = DbConnection.BeginTransaction();
+			return new Transaction(this, this, dbTransaction);
 		}
 
-		public Task<QueryResult> ExecuteReaderAsync(QueryExpression queryExpression)
+		public async Task<Transaction> CreateTransactionAsync()
 		{
-			return ExecuteReaderAsync(ConvertExpressionToQuery(queryExpression));
+			await EnsureOpenAsync().ConfigureAwait(false);
+			var dbTransaction = DbConnection.BeginTransaction();
+			return new Transaction(this, this, dbTransaction);
+		}
+
+		SqlQuery IDataCommandCreator.ConvertExpressionToQuery(QueryExpression queryExpression)
+		{
+			return ConvertExpressionToQuery(queryExpression);
 		}
 	}
 }
