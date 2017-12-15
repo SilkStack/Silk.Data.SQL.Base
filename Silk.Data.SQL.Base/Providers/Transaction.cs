@@ -37,6 +37,7 @@ namespace Silk.Data.SQL.Providers
 		{
 			if (HasOutstandingCommits)
 				Commit();
+			_dbTransaction.Dispose();
 		}
 
 		protected override void EnsureOpen()
