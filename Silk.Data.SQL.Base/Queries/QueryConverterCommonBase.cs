@@ -262,6 +262,10 @@ namespace Silk.Data.SQL.Queries
 				{
 					Sql.Append(") ");
 				}
+				else
+				{
+					Sql.Append("; ");
+				}
 			}
 
 			protected override void VisitExpressionGroup(ICollection<QueryExpression> queryExpressions, ExpressionGroupType groupType)
