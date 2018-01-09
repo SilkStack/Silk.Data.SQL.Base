@@ -14,7 +14,7 @@ namespace Silk.Data.SQL.Base.Tests
 			var sqlQuery = _queryConverter.ConvertToQuery(
 					QueryExpression.ExecuteStoredProcedure("sp_Test")
 				);
-			Assert.AreEqual("EXECUTE [sp_Test] ", sqlQuery.SqlText);
+			Assert.AreEqual("EXECUTE [sp_Test] ; ", sqlQuery.SqlText);
 		}
 
 		[TestMethod]
@@ -26,7 +26,7 @@ namespace Silk.Data.SQL.Base.Tests
 						QueryExpression.Value(1),
 						QueryExpression.Value(5)
 				));
-			Assert.AreEqual("EXECUTE [sp_Test]  @valueParameter1 ,  @valueParameter2 ", sqlQuery.SqlText);
+			Assert.AreEqual("EXECUTE [sp_Test]  @valueParameter1 ,  @valueParameter2 ; ", sqlQuery.SqlText);
 		}
 	}
 }

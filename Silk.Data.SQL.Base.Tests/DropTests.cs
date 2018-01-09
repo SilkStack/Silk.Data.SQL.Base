@@ -14,7 +14,7 @@ namespace Silk.Data.SQL.Base.Tests
 			var sqlQuery = _queryConverter.ConvertToQuery(
 				QueryExpression.DropTable("TestTable")
 				);
-			Assert.AreEqual("DROP TABLE [TestTable]", sqlQuery.SqlText);
+			Assert.AreEqual("DROP TABLE [TestTable]; ", sqlQuery.SqlText);
 		}
 	}
 }

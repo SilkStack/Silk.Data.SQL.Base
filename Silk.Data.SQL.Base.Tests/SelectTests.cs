@@ -21,7 +21,7 @@ namespace Silk.Data.SQL.Base.Tests
 
 			var valueParameter = sqlQuery.QueryParameters.Values.First();
 			Assert.AreEqual(1, valueParameter.Value);
-			Assert.AreEqual($"SELECT  @{valueParameter.Name} ", sqlQuery.SqlText);
+			Assert.AreEqual($"SELECT  @{valueParameter.Name} ; ", sqlQuery.SqlText);
 		}
 
 		[TestMethod]
@@ -39,7 +39,7 @@ namespace Silk.Data.SQL.Base.Tests
 
 			Assert.IsNotNull(sqlQuery);
 			Assert.IsNull(sqlQuery.QueryParameters);
-			Assert.AreEqual("SELECT [TestTable].[TestColumn1], [TestTable].[TestColumn2] FROM [TestTable]", sqlQuery.SqlText);
+			Assert.AreEqual("SELECT [TestTable].[TestColumn1], [TestTable].[TestColumn2] FROM [TestTable]; ", sqlQuery.SqlText);
 		}
 
 		[TestMethod]
@@ -54,7 +54,7 @@ namespace Silk.Data.SQL.Base.Tests
 				from: subSelect
 				);
 			var sqlQuery = _queryConverter.ConvertToQuery(queryExpression);
-			Assert.AreEqual("SELECT [subSelect].* FROM (SELECT  @valueParameter1 )  AS [subSelect]", sqlQuery.SqlText);
+			Assert.AreEqual("SELECT [subSelect].* FROM (SELECT  @valueParameter1 )  AS [subSelect]; ", sqlQuery.SqlText);
 		}
 
 		[TestMethod]
@@ -75,7 +75,7 @@ namespace Silk.Data.SQL.Base.Tests
 				);
 
 			var sqlQuery = _queryConverter.ConvertToQuery(queryExpression);
-			Assert.AreEqual("SELECT [TestTable].[TestColumn1], [TestTable].[TestColumn2] FROM [TestTable] WHERE ([TestTable].[TestColumn1] =  @valueParameter1 )", sqlQuery.SqlText);
+			Assert.AreEqual("SELECT [TestTable].[TestColumn1], [TestTable].[TestColumn2] FROM [TestTable] WHERE ([TestTable].[TestColumn1] =  @valueParameter1 ); ", sqlQuery.SqlText);
 		}
 
 		[TestMethod]
@@ -95,7 +95,7 @@ namespace Silk.Data.SQL.Base.Tests
 				);
 
 			var sqlQuery = _queryConverter.ConvertToQuery(queryExpression);
-			Assert.AreEqual("SELECT [TestTable].[TestColumn1], [TestTable].[TestColumn2] FROM [TestTable] WHERE ([TestTable].[TestColumn1] AND  @valueParameter1 )", sqlQuery.SqlText);
+			Assert.AreEqual("SELECT [TestTable].[TestColumn1], [TestTable].[TestColumn2] FROM [TestTable] WHERE ([TestTable].[TestColumn1] AND  @valueParameter1 ); ", sqlQuery.SqlText);
 		}
 
 		[TestMethod]
@@ -116,7 +116,7 @@ namespace Silk.Data.SQL.Base.Tests
 				);
 
 			var sqlQuery = _queryConverter.ConvertToQuery(queryExpression);
-			Assert.AreEqual("SELECT [TestTable].[TestColumn1], [TestTable].[TestColumn2] FROM [TestTable] HAVING ([TestTable].[TestColumn1] =  @valueParameter1 )", sqlQuery.SqlText);
+			Assert.AreEqual("SELECT [TestTable].[TestColumn1], [TestTable].[TestColumn2] FROM [TestTable] HAVING ([TestTable].[TestColumn1] =  @valueParameter1 ); ", sqlQuery.SqlText);
 		}
 
 		[TestMethod]
@@ -136,7 +136,7 @@ namespace Silk.Data.SQL.Base.Tests
 				);
 
 			var sqlQuery = _queryConverter.ConvertToQuery(queryExpression);
-			Assert.AreEqual("SELECT [TestTable].[TestColumn1], [TestTable].[TestColumn2] FROM [TestTable] GROUP BY [TestTable].[TestColumn1], [TestTable].[TestColumn2]", sqlQuery.SqlText);
+			Assert.AreEqual("SELECT [TestTable].[TestColumn1], [TestTable].[TestColumn2] FROM [TestTable] GROUP BY [TestTable].[TestColumn1], [TestTable].[TestColumn2]; ", sqlQuery.SqlText);
 		}
 
 		[TestMethod]
@@ -156,7 +156,7 @@ namespace Silk.Data.SQL.Base.Tests
 				);
 
 			var sqlQuery = _queryConverter.ConvertToQuery(queryExpression);
-			Assert.AreEqual("SELECT [TestTable].[TestColumn1], [TestTable].[TestColumn2] FROM [TestTable] ORDER BY [TestTable].[TestColumn1], [TestTable].[TestColumn2]", sqlQuery.SqlText);
+			Assert.AreEqual("SELECT [TestTable].[TestColumn1], [TestTable].[TestColumn2] FROM [TestTable] ORDER BY [TestTable].[TestColumn1], [TestTable].[TestColumn2]; ", sqlQuery.SqlText);
 		}
 
 		[TestMethod]
@@ -173,7 +173,7 @@ namespace Silk.Data.SQL.Base.Tests
 				);
 
 			var sqlQuery = _queryConverter.ConvertToQuery(queryExpression);
-			Assert.AreEqual("SELECT [TestTable].[TestColumn1], [TestTable].[TestColumn2] FROM [TestTable] LIMIT  @valueParameter1 ", sqlQuery.SqlText);
+			Assert.AreEqual("SELECT [TestTable].[TestColumn1], [TestTable].[TestColumn2] FROM [TestTable] LIMIT  @valueParameter1 ; ", sqlQuery.SqlText);
 			Assert.AreEqual(1, sqlQuery.QueryParameters["valueParameter1"].Value);
 		}
 
@@ -192,7 +192,7 @@ namespace Silk.Data.SQL.Base.Tests
 				);
 
 			var sqlQuery = _queryConverter.ConvertToQuery(queryExpression);
-			Assert.AreEqual("SELECT [TestTable].[TestColumn1], [TestTable].[TestColumn2] FROM [TestTable] LIMIT  @valueParameter1  OFFSET  @valueParameter2 ", sqlQuery.SqlText);
+			Assert.AreEqual("SELECT [TestTable].[TestColumn1], [TestTable].[TestColumn2] FROM [TestTable] LIMIT  @valueParameter1  OFFSET  @valueParameter2 ; ", sqlQuery.SqlText);
 			Assert.AreEqual(1, sqlQuery.QueryParameters["valueParameter1"].Value);
 			Assert.AreEqual(2, sqlQuery.QueryParameters["valueParameter2"].Value);
 		}
@@ -211,7 +211,7 @@ namespace Silk.Data.SQL.Base.Tests
 				);
 
 			var sqlQuery = _queryConverter.ConvertToQuery(queryExpression);
-			Assert.AreEqual("SELECT [TestTable].[TestColumn1], [TestTable].[TestColumn2] FROM [TestTable] LIMIT  @valueParameter1  OFFSET  @valueParameter2 ", sqlQuery.SqlText);
+			Assert.AreEqual("SELECT [TestTable].[TestColumn1], [TestTable].[TestColumn2] FROM [TestTable] LIMIT  @valueParameter1  OFFSET  @valueParameter2 ; ", sqlQuery.SqlText);
 			Assert.AreEqual(int.MaxValue, sqlQuery.QueryParameters["valueParameter1"].Value);
 			Assert.AreEqual(2, sqlQuery.QueryParameters["valueParameter2"].Value);
 		}
@@ -237,7 +237,7 @@ namespace Silk.Data.SQL.Base.Tests
 				);
 
 			var sqlQuery = _queryConverter.ConvertToQuery(queryExpression);
-			Assert.AreEqual("SELECT [TestTable].[TestColumn1], [TestTable2].[TestColumn2] FROM [TestTable] INNER JOIN [TestTable2] ON [TestTable].[TestColumn1] = [TestTable2].[TestColumn2]", sqlQuery.SqlText);
+			Assert.AreEqual("SELECT [TestTable].[TestColumn1], [TestTable2].[TestColumn2] FROM [TestTable] INNER JOIN [TestTable2] ON [TestTable].[TestColumn1] = [TestTable2].[TestColumn2]; ", sqlQuery.SqlText);
 		}
 
 		[TestMethod]
@@ -266,7 +266,7 @@ namespace Silk.Data.SQL.Base.Tests
 				);
 
 			var sqlQuery = _queryConverter.ConvertToQuery(queryExpression);
-			Assert.AreEqual("SELECT * FROM [TestTable] INNER JOIN [TestTable2] AS [t2] ON [TestTable].[TestColumn1] = [t2].[TestColumn2] INNER JOIN [TestTable2] AS [t3] ON [TestTable].[TestColumn1] = [t3].[TestColumn3]", sqlQuery.SqlText);
+			Assert.AreEqual("SELECT * FROM [TestTable] INNER JOIN [TestTable2] AS [t2] ON [TestTable].[TestColumn1] = [t2].[TestColumn2] INNER JOIN [TestTable2] AS [t3] ON [TestTable].[TestColumn1] = [t3].[TestColumn3]; ", sqlQuery.SqlText);
 		}
 
 		[TestMethod]
@@ -304,7 +304,7 @@ namespace Silk.Data.SQL.Base.Tests
 				);
 
 			var sqlQuery = _queryConverter.ConvertToQuery(queryExpression);
-			Assert.AreEqual("SELECT [source].*, [t2].* FROM (SELECT * FROM [TestTable])  AS [source] INNER JOIN [TestTable2] AS [t2] ON [source].[TestColumn1] = [t2].[TestColumn2] INNER JOIN [TestTable2] AS [t3] ON [source].[TestColumn1] = [t3].[TestColumn3] WHERE ([t3].[TestColumn3] =  @valueParameter1 ) GROUP BY [source].[TestColumn1] ORDER BY [t2].[TestColumn2] LIMIT  @valueParameter2  OFFSET  @valueParameter3 ", sqlQuery.SqlText);
+			Assert.AreEqual("SELECT [source].*, [t2].* FROM (SELECT * FROM [TestTable])  AS [source] INNER JOIN [TestTable2] AS [t2] ON [source].[TestColumn1] = [t2].[TestColumn2] INNER JOIN [TestTable2] AS [t3] ON [source].[TestColumn1] = [t3].[TestColumn3] WHERE ([t3].[TestColumn3] =  @valueParameter1 ) GROUP BY [source].[TestColumn1] ORDER BY [t2].[TestColumn2] LIMIT  @valueParameter2  OFFSET  @valueParameter3 ; ", sqlQuery.SqlText);
 		}
 	}
 }

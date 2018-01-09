@@ -15,7 +15,7 @@ namespace Silk.Data.SQL.Base.Tests
 				QueryExpression.Delete(
 					QueryExpression.Table("TestTable")
 				));
-			Assert.AreEqual("DELETE FROM [TestTable]", sqlQuery.SqlText);
+			Assert.AreEqual("DELETE FROM [TestTable]; ", sqlQuery.SqlText);
 		}
 
 		[TestMethod]
@@ -26,7 +26,7 @@ namespace Silk.Data.SQL.Base.Tests
 					QueryExpression.Table("TestTable"),
 					QueryExpression.Compare(QueryExpression.Column("Column1"), ComparisonOperator.AreEqual, QueryExpression.Column("Column2"))
 				));
-			Assert.AreEqual("DELETE FROM [TestTable] WHERE ([Column1] = [Column2])", sqlQuery.SqlText);
+			Assert.AreEqual("DELETE FROM [TestTable] WHERE ([Column1] = [Column2]); ", sqlQuery.SqlText);
 		}
 	}
 }

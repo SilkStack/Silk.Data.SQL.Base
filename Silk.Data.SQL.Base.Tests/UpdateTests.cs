@@ -18,7 +18,7 @@ namespace Silk.Data.SQL.Base.Tests
 					QueryExpression.Assign("Column1", 1),
 					QueryExpression.Assign("Column2", QueryExpression.Column("Column3"))
 				));
-			Assert.AreEqual("UPDATE [TestTable] SET [Column1] =  @valueParameter1 , [Column2] = [Column3]", sqlQuery.SqlText);
+			Assert.AreEqual("UPDATE [TestTable] SET [Column1] =  @valueParameter1 , [Column2] = [Column3]; ", sqlQuery.SqlText);
 		}
 
 		[TestMethod]
@@ -31,7 +31,7 @@ namespace Silk.Data.SQL.Base.Tests
 					QueryExpression.Assign("Column1", 1),
 					QueryExpression.Assign("Column2", QueryExpression.Column("Column3"))
 				));
-			Assert.AreEqual("UPDATE [TestTable] SET [Column1] =  @valueParameter1 , [Column2] = [Column3] WHERE ([Column4] >  @valueParameter2 )", sqlQuery.SqlText);
+			Assert.AreEqual("UPDATE [TestTable] SET [Column1] =  @valueParameter1 , [Column2] = [Column3] WHERE ([Column4] >  @valueParameter2 ); ", sqlQuery.SqlText);
 		}
 	}
 }

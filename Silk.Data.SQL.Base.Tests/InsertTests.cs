@@ -17,7 +17,7 @@ namespace Silk.Data.SQL.Base.Tests
 					new[] { "Column1", "Column2" },
 					new object[] { 1, "Hello World" }
 				));
-			Assert.AreEqual("INSERT INTO [TestTable] ([Column1], [Column2])  VALUES  ( @valueParameter1 ,  @valueParameter2 ) ", sqlQuery.SqlText);
+			Assert.AreEqual("INSERT INTO [TestTable] ([Column1], [Column2])  VALUES  ( @valueParameter1 ,  @valueParameter2 ) ; ", sqlQuery.SqlText);
 			Assert.AreEqual(1, sqlQuery.QueryParameters["valueParameter1"].Value);
 			Assert.AreEqual("Hello World", sqlQuery.QueryParameters["valueParameter2"].Value);
 		}
@@ -33,7 +33,7 @@ namespace Silk.Data.SQL.Base.Tests
 					new object[] { 2, "World" },
 					new object[] { 3, "Hello World" }
 				));
-			Assert.AreEqual("INSERT INTO [TestTable] ([Column1], [Column2])  VALUES  ( @valueParameter1 ,  @valueParameter2 ) ,  ( @valueParameter3 ,  @valueParameter4 ) ,  ( @valueParameter5 ,  @valueParameter6 ) ", sqlQuery.SqlText);
+			Assert.AreEqual("INSERT INTO [TestTable] ([Column1], [Column2])  VALUES  ( @valueParameter1 ,  @valueParameter2 ) ,  ( @valueParameter3 ,  @valueParameter4 ) ,  ( @valueParameter5 ,  @valueParameter6 ) ; ", sqlQuery.SqlText);
 			Assert.AreEqual(1, sqlQuery.QueryParameters["valueParameter1"].Value);
 			Assert.AreEqual("Hello", sqlQuery.QueryParameters["valueParameter2"].Value);
 			Assert.AreEqual(2, sqlQuery.QueryParameters["valueParameter3"].Value);

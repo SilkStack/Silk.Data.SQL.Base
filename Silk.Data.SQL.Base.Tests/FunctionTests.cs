@@ -15,7 +15,7 @@ namespace Silk.Data.SQL.Base.Tests
 				QueryExpression.Select(new[] {
 					QueryExpression.Distinct(QueryExpression.All())
 				}));
-			Assert.AreEqual("SELECT  DISTINCT *", sqlQuery.SqlText);
+			Assert.AreEqual("SELECT  DISTINCT *; ", sqlQuery.SqlText);
 		}
 
 		[TestMethod]
@@ -25,7 +25,7 @@ namespace Silk.Data.SQL.Base.Tests
 				QueryExpression.Select(new[] {
 					QueryExpression.CountFunction()
 				}));
-			Assert.AreEqual("SELECT  COUNT() ", sqlQuery.SqlText);
+			Assert.AreEqual("SELECT  COUNT() ; ", sqlQuery.SqlText);
 		}
 
 		[TestMethod]
@@ -35,7 +35,7 @@ namespace Silk.Data.SQL.Base.Tests
 				QueryExpression.Select(new[] {
 					QueryExpression.CountFunction(QueryExpression.All())
 				}));
-			Assert.AreEqual("SELECT  COUNT(*) ", sqlQuery.SqlText);
+			Assert.AreEqual("SELECT  COUNT(*) ; ", sqlQuery.SqlText);
 		}
 
 		[TestMethod]
@@ -45,7 +45,7 @@ namespace Silk.Data.SQL.Base.Tests
 				QueryExpression.Select(new[] {
 					QueryExpression.Random()
 				}));
-			Assert.AreEqual("SELECT  RANDOM()", sqlQuery.SqlText);
+			Assert.AreEqual("SELECT  RANDOM(); ", sqlQuery.SqlText);
 		}
 	}
 }
