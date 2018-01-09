@@ -41,6 +41,36 @@ namespace Silk.Data.SQL.Expressions
 			return CreateTable(tableName, (IEnumerable<ColumnDefinitionExpression>)columnDefinitions);
 		}
 
+		public static CreateTableIndexExpression CreateIndex(string tableName, params string[] columns)
+		{
+			return CreateIndex(Table(tableName), columns);
+		}
+
+		public static CreateTableIndexExpression CreateIndex(TableExpression table, params string[] columns)
+		{
+			return CreateIndex(table, columns.Select(q => Column(q)).ToArray());
+		}
+
+		public static CreateTableIndexExpression CreateIndex(TableExpression table, params ColumnExpression[] columns)
+		{
+			return CreateIndex(table, false, columns);
+		}
+
+		public static CreateTableIndexExpression CreateIndex(string tableName, bool uniqueConstraint = false, params string[] columns)
+		{
+			return CreateIndex(Table(tableName), uniqueConstraint, columns);
+		}
+
+		public static CreateTableIndexExpression CreateIndex(TableExpression table, bool uniqueConstraint = false, params string[] columns)
+		{
+			return CreateIndex(table, uniqueConstraint, columns.Select(q => Column(q)).ToArray());
+		}
+
+		public static CreateTableIndexExpression CreateIndex(TableExpression table, bool uniqueConstraint = false, params ColumnExpression[] columns)
+		{
+			return new CreateTableIndexExpression(table, columns, uniqueConstraint);
+		}
+
 		public static DropExpression DropTable(string tableName)
 		{
 			return new DropExpression(Table(tableName));

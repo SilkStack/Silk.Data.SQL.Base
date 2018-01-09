@@ -105,6 +105,10 @@ namespace Silk.Data.SQL.Expressions
 				case CreateTableExpression create:
 					VisitExpressionGroup(create.ColumnDefinitions, ExpressionGroupType.ColumnDefinitions);
 					break;
+				case CreateTableIndexExpression createIndex:
+					Visit(createIndex.Table);
+					VisitExpressionGroup(createIndex.Columns, ExpressionGroupType.ColumnList);
+					break;
 				case DropExpression drop:
 					Visit(drop.Expression);
 					break;

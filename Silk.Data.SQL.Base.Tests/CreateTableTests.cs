@@ -20,5 +20,40 @@ namespace Silk.Data.SQL.Base.Tests
 				));
 			Assert.AreEqual("CREATE TABLE [TestTable] ([Column1] Int() NOT NULL AUTOINC, [Column2] Text(255) NOT NULL, [Column3] Text(), CONSTRAINT [PK] PRIMARY KEY ([Column1],[Column2])); ", sqlQuery.SqlText);
 		}
+
+		[TestMethod]
+		public void CreateIndex()
+		{
+			var sqlQuery = _queryConverter.ConvertToQuery(
+				QueryExpression.CreateIndex(
+					"TestTable",
+					"Column1"
+				));
+			Assert.AreEqual("CREATE  INDEX ON [TestTable] ([Column1]); ", sqlQuery.SqlText);
+		}
+
+		[TestMethod]
+		public void CreateUniqueIndex()
+		{
+			var sqlQuery = _queryConverter.ConvertToQuery(
+				QueryExpression.CreateIndex(
+					"TestTable",
+					uniqueConstraint: true,
+					columns: "Column1"
+				));
+			Assert.AreEqual("CREATE UNIQUE INDEX ON [TestTable] ([Column1]); ", sqlQuery.SqlText);
+		}
+
+		[TestMethod]
+		public void CreateCompositeIndex()
+		{
+			var sqlQuery = _queryConverter.ConvertToQuery(
+				QueryExpression.CreateIndex(
+					"TestTable",
+					"Column1",
+					"Column2"
+				));
+			Assert.AreEqual("CREATE  INDEX ON [TestTable] ([Column1], [Column2]); ", sqlQuery.SqlText);
+		}
 	}
 }

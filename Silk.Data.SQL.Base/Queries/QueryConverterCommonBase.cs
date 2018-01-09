@@ -250,6 +250,12 @@ namespace Silk.Data.SQL.Queries
 						}
 						Sql.Append(")");
 						break;
+					case CreateTableIndexExpression createIndex:
+						var unique = createIndex.UniqueConstraint ? "UNIQUE" : "";
+						Sql.Append($"CREATE {unique} INDEX ON {Converter.QuoteIdentifier(createIndex.Table.TableName)} (");
+						VisitExpressionGroup(createIndex.Columns, ExpressionGroupType.ColumnList);
+						Sql.Append(")");
+						break;
 					case DropExpression drop:
 						Sql.Append("DROP ");
 						if (drop.Expression is TableExpression)
