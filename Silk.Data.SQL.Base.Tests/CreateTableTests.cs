@@ -29,7 +29,7 @@ namespace Silk.Data.SQL.Base.Tests
 					"TestTable",
 					"Column1"
 				));
-			Assert.AreEqual("CREATE  INDEX ON [TestTable] ([Column1]); ", sqlQuery.SqlText);
+			Assert.AreEqual("CREATE  INDEX idx7_Column1 ON [TestTable] ([Column1]); ", sqlQuery.SqlText);
 		}
 
 		[TestMethod]
@@ -41,7 +41,7 @@ namespace Silk.Data.SQL.Base.Tests
 					uniqueConstraint: true,
 					columns: "Column1"
 				));
-			Assert.AreEqual("CREATE UNIQUE INDEX ON [TestTable] ([Column1]); ", sqlQuery.SqlText);
+			Assert.AreEqual("CREATE UNIQUE INDEX idx7_Column1 ON [TestTable] ([Column1]); ", sqlQuery.SqlText);
 		}
 
 		[TestMethod]
@@ -53,7 +53,7 @@ namespace Silk.Data.SQL.Base.Tests
 					"Column1",
 					"Column2"
 				));
-			Assert.AreEqual("CREATE  INDEX ON [TestTable] ([Column1], [Column2]); ", sqlQuery.SqlText);
+			Assert.AreEqual("CREATE  INDEX idx15_Column1_Column ON [TestTable] ([Column1], [Column2]); ", sqlQuery.SqlText);
 		}
 	}
 }

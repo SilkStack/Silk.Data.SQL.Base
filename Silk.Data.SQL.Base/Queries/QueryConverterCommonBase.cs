@@ -252,7 +252,12 @@ namespace Silk.Data.SQL.Queries
 						break;
 					case CreateTableIndexExpression createIndex:
 						var unique = createIndex.UniqueConstraint ? "UNIQUE" : "";
-						Sql.Append($"CREATE {unique} INDEX ON {Converter.QuoteIdentifier(createIndex.Table.TableName)} (");
+						var indexColumnNames = string.Join("_", createIndex.Columns.Select(q => q.ColumnName));
+						var truncatedColumnNames = indexColumnNames;
+						if (truncatedColumnNames.Length > 14)
+							truncatedColumnNames = indexColumnNames.Substring(0, 14);
+						var indexName = $"idx{indexColumnNames.Length}_{truncatedColumnNames}";
+						Sql.Append($"CREATE {unique} INDEX {indexName} ON {Converter.QuoteIdentifier(createIndex.Table.TableName)} (");
 						VisitExpressionGroup(createIndex.Columns, ExpressionGroupType.ColumnList);
 						Sql.Append(")");
 						break;
