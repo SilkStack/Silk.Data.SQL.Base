@@ -256,7 +256,7 @@ namespace Silk.Data.SQL.Queries
 						var truncatedColumnNames = indexColumnNames;
 						if (truncatedColumnNames.Length > 14)
 							truncatedColumnNames = indexColumnNames.Substring(0, 14);
-						var indexName = $"idx{indexColumnNames.Length}_{truncatedColumnNames}";
+						var indexName = $"idx{indexColumnNames.Length}_{createIndex.Table.TableName}_{truncatedColumnNames}";
 						Sql.Append($"CREATE {unique} INDEX {indexName} ON {Converter.QuoteIdentifier(createIndex.Table.TableName)} (");
 						VisitExpressionGroup(createIndex.Columns, ExpressionGroupType.ColumnList);
 						Sql.Append(")");
