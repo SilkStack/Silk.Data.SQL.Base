@@ -162,6 +162,15 @@ namespace Silk.Data.SQL.Expressions
 			return new ComparisonExpression(left, comparisonType, right);
 		}
 
+		public static QueryExpression CombineConditions(QueryExpression existing, ConditionType conditionType, QueryExpression @new)
+		{
+			if (existing == null)
+				return @new;
+			if (conditionType == ConditionType.AndAlso)
+				return QueryExpression.AndAlso(existing, @new);
+			return QueryExpression.OrElse(existing, @new);
+		}
+
 		public static ConditionExpression AndAlso(QueryExpression left, QueryExpression right)
 		{
 			return new ConditionExpression(left, ConditionType.AndAlso, right);
