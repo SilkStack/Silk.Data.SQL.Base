@@ -3,6 +3,14 @@
   <PropertyGroup>
     <TargetFramework>netstandard1.2</TargetFramework>
     <RootNamespace>Silk.Data.SQL</RootNamespace>
+    <Version>0.0.1</Version>
+    <Authors>John Carruthers</Authors>
+    <Company />
+    <Product>SilkStack</Product>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>Silk.Data.SQL.Base is a library for expressing and executing SQL queries for .NET.
+
+Part of the SilkStack project.</Description>
   </PropertyGroup>
 
   <ItemGroup>
