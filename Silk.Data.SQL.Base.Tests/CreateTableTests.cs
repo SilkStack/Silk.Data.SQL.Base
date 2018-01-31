@@ -16,9 +16,10 @@ namespace Silk.Data.SQL.Base.Tests
 					"TestTable",
 					QueryExpression.DefineColumn("Column1", SqlDataType.Int(), isAutoIncrement: true, isPrimaryKey: true),
 					QueryExpression.DefineColumn("Column2", SqlDataType.Text(255), isPrimaryKey: true),
-					QueryExpression.DefineColumn("Column3", SqlDataType.Text())
+					QueryExpression.DefineColumn("Column3", SqlDataType.Text()),
+					QueryExpression.DefineColumn("Column4", SqlDataType.UnsignedInt())
 				));
-			Assert.AreEqual("CREATE TABLE [TestTable] ([Column1] Int() NOT NULL AUTOINC, [Column2] Text(255) NOT NULL, [Column3] Text(), CONSTRAINT [PK] PRIMARY KEY ([Column1],[Column2])); ", sqlQuery.SqlText);
+			Assert.AreEqual("CREATE TABLE [TestTable] ([Column1] Int() NOT NULL AUTOINC, [Column2] Text(255) NOT NULL, [Column3] Text(), [Column4] UNSIGNED Int() NOT NULL, CONSTRAINT [PK] PRIMARY KEY ([Column1],[Column2])); ", sqlQuery.SqlText);
 		}
 
 		[TestMethod]
@@ -29,7 +30,7 @@ namespace Silk.Data.SQL.Base.Tests
 					"TestTable",
 					"Column1"
 				));
-			Assert.AreEqual("CREATE  INDEX idx7_Column1 ON [TestTable] ([Column1]); ", sqlQuery.SqlText);
+			Assert.AreEqual("CREATE  INDEX idx7_TestTable_Column1 ON [TestTable] ([Column1]); ", sqlQuery.SqlText);
 		}
 
 		[TestMethod]
@@ -41,7 +42,7 @@ namespace Silk.Data.SQL.Base.Tests
 					uniqueConstraint: true,
 					columns: "Column1"
 				));
-			Assert.AreEqual("CREATE UNIQUE INDEX idx7_Column1 ON [TestTable] ([Column1]); ", sqlQuery.SqlText);
+			Assert.AreEqual("CREATE UNIQUE INDEX idx7_TestTable_Column1 ON [TestTable] ([Column1]); ", sqlQuery.SqlText);
 		}
 
 		[TestMethod]
@@ -53,7 +54,7 @@ namespace Silk.Data.SQL.Base.Tests
 					"Column1",
 					"Column2"
 				));
-			Assert.AreEqual("CREATE  INDEX idx15_Column1_Column ON [TestTable] ([Column1], [Column2]); ", sqlQuery.SqlText);
+			Assert.AreEqual("CREATE  INDEX idx15_TestTable_Column1_Column ON [TestTable] ([Column1], [Column2]); ", sqlQuery.SqlText);
 		}
 	}
 }

@@ -457,6 +457,10 @@ namespace Silk.Data.SQL.Queries
 				{
 					Sql.Append(Converter.QuoteIdentifier(columnDefinitionExpression.ColumnName));
 					Sql.Append(" ");
+					if (columnDefinitionExpression.DataType.Unsigned)
+					{
+						Sql.Append("UNSIGNED ");
+					}
 					Sql.Append(Converter.GetDbDatatype(columnDefinitionExpression.DataType));
 					if (!columnDefinitionExpression.IsNullable)
 					{
