@@ -78,6 +78,9 @@ namespace Silk.Data.SQL.Queries
 					 * non-1 or no rows if the table doesn't exist.
 					 */
 					break;
+				//  documented functions that have no generic implementation
+				case LastInsertIdFunctionExpression lastInsertIdExpression:
+					break;
 				case InFunctionExpression inExpression:
 					Sql.Append(" IN (");
 					for (var i = 0; i < inExpression.Expressions.Length; i++)
