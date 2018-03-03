@@ -9,21 +9,24 @@ namespace Silk.Data.SQL.Queries
 	{
 		private readonly DbCommand _command;
 		private readonly DbDataReader _reader;
+		private readonly DbConnection _connection;
 
 		public bool HasRows => _reader.HasRows;
 
 		public int FieldCount => _reader.FieldCount;
 
-		public QueryResult(DbCommand command, DbDataReader reader)
+		public QueryResult(DbCommand command, DbDataReader reader, DbConnection dbConnection)
 		{
 			_command = command;
 			_reader = reader;
+			_connection = dbConnection;
 		}
 
 		public void Dispose()
 		{
 			_reader.Dispose();
 			_command.Dispose();
+			_connection.Dispose();
 		}
 
 		public bool GetBoolean(int ordinal)

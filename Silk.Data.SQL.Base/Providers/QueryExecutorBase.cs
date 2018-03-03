@@ -7,9 +7,9 @@ namespace Silk.Data.SQL.Providers
 {
 	public abstract class QueryExecutorBase : IQueryProvider
 	{
-		protected abstract void EnsureOpen();
-		protected abstract Task EnsureOpenAsync();
-		protected abstract DbCommand CreateCommand(SqlQuery sqlQuery);
+		protected abstract DbConnection Connect();
+		protected abstract Task<DbConnection> ConnectAsync();
+		protected abstract DbCommand CreateCommand(DbConnection connection, SqlQuery sqlQuery);
 		protected abstract SqlQuery ConvertExpressionToQuery(QueryExpression queryExpression);
 
 		public abstract string ProviderName { get; }
@@ -17,8 +17,8 @@ namespace Silk.Data.SQL.Providers
 
 		protected virtual int ExecuteNonQuery(SqlQuery sqlQuery)
 		{
-			EnsureOpen();
-			using (var command = CreateCommand(sqlQuery))
+			using (var connection = Connect())
+			using (var command = CreateCommand(connection, sqlQuery))
 			{
 				return command.ExecuteNonQuery();
 			}
@@ -26,9 +26,8 @@ namespace Silk.Data.SQL.Providers
 
 		protected virtual async Task<int> ExecuteNonQueryAsync(SqlQuery sqlQuery)
 		{
-			await EnsureOpenAsync()
-				.ConfigureAwait(false);
-			using (var command = CreateCommand(sqlQuery))
+			using (var connection = await ConnectAsync())
+			using (var command = CreateCommand(connection, sqlQuery))
 			{
 				return await command.ExecuteNonQueryAsync()
 					.ConfigureAwait(false);
@@ -37,18 +36,16 @@ namespace Silk.Data.SQL.Providers
 
 		protected virtual QueryResult ExecuteReader(SqlQuery sqlQuery)
 		{
-			EnsureOpen();
-			var command = CreateCommand(sqlQuery);
-			return new QueryResult(command, command.ExecuteReader());
+			var connection = Connect();
+			var command = CreateCommand(connection, sqlQuery);
+			return new QueryResult(command, command.ExecuteReader(), connection);
 		}
 
 		protected virtual async Task<QueryResult> ExecuteReaderAsync(SqlQuery sqlQuery)
 		{
-			await EnsureOpenAsync()
-				.ConfigureAwait(false);
-			var command = CreateCommand(sqlQuery);
-			return new QueryResult(command, await command.ExecuteReaderAsync()
-				.ConfigureAwait(false));
+			var connection = await ConnectAsync();
+			var command = CreateCommand(connection, sqlQuery);
+			return new QueryResult(command, await command.ExecuteReaderAsync(), connection);
 		}
 
 		public virtual int ExecuteNonQuery(QueryExpression queryExpression)
