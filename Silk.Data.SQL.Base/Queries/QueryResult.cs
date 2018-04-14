@@ -26,7 +26,7 @@ namespace Silk.Data.SQL.Queries
 		{
 			_reader.Dispose();
 			_command.Dispose();
-			_connection.Dispose();
+			_connection?.Dispose();
 		}
 
 		public bool GetBoolean(int ordinal)

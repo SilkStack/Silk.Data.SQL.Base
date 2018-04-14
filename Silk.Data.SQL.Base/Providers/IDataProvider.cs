@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Silk.Data.SQL.Providers
 {
@@ -7,5 +8,7 @@ namespace Silk.Data.SQL.Providers
 	/// </summary>
 	public interface IDataProvider : IQueryProvider, IDisposable
 	{
+		ITransaction CreateTransaction();
+		Task<ITransaction> CreateTransactionAsync();
 	}
 }

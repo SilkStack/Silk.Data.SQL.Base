@@ -2,20 +2,33 @@
 using Silk.Data.SQL.Expressions;
 using Silk.Data.SQL.Queries;
 using System;
+using System.Threading.Tasks;
 
 namespace Silk.Data.SQL.Providers
 {
 	public abstract class DataProviderCommonBase : QueryExecutorBase, IDataProvider
 	{
+		public virtual ITransaction CreateTransaction()
+		{
+			var connection = Connect();
+			var transaction = connection.BeginTransaction();
+			return null;
+		}
+
+		public virtual Task<ITransaction> CreateTransactionAsync()
+		{
+			return null;
+		}
+
 		protected abstract IQueryConverter CreateQueryConverter();
 
-		protected override SqlQuery ConvertExpressionToQuery(QueryExpression queryExpression)
+		public override SqlQuery ConvertExpressionToQuery(QueryExpression queryExpression)
 		{
 			return CreateQueryConverter()
 				.ConvertToQuery(queryExpression);
 		}
 
-		protected override DbCommand CreateCommand(DbConnection connection, SqlQuery sqlQuery)
+		public override DbCommand CreateCommand(DbConnection connection, SqlQuery sqlQuery)
 		{
 			var command = connection.CreateCommand();
 			command.CommandText = sqlQuery.SqlText;

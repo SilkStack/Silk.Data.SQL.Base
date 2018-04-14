@@ -9,8 +9,8 @@ namespace Silk.Data.SQL.Providers
 	{
 		protected abstract DbConnection Connect();
 		protected abstract Task<DbConnection> ConnectAsync();
-		protected abstract DbCommand CreateCommand(DbConnection connection, SqlQuery sqlQuery);
-		protected abstract SqlQuery ConvertExpressionToQuery(QueryExpression queryExpression);
+		public abstract DbCommand CreateCommand(DbConnection connection, SqlQuery sqlQuery);
+		public abstract SqlQuery ConvertExpressionToQuery(QueryExpression queryExpression);
 
 		public abstract string ProviderName { get; }
 		public abstract void Dispose();
