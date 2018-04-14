@@ -12,12 +12,14 @@ namespace Silk.Data.SQL.Providers
 		{
 			var connection = Connect();
 			var transaction = connection.BeginTransaction();
-			return null;
+			return new Transaction(connection, transaction, this);
 		}
 
-		public virtual Task<ITransaction> CreateTransactionAsync()
+		public virtual async Task<ITransaction> CreateTransactionAsync()
 		{
-			return null;
+			var connection = await ConnectAsync();
+			var transaction = connection.BeginTransaction();
+			return new Transaction(connection, transaction, this);
 		}
 
 		protected abstract IQueryConverter CreateQueryConverter();
