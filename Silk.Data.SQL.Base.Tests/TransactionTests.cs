@@ -26,7 +26,7 @@ namespace Silk.Data.SQL.Base.Tests
 DELETE FROM [TestTable] WHERE ([Id] =  @valueParameter1 ); ;
 DELETE FROM [TestTable] WHERE ([Id] =  @valueParameter2 ); ;
 COMMIT;
-; ", sqlQuery.SqlText);
+; ".Replace("\r", "").Replace("\n",""), sqlQuery.SqlText.Replace("\r", "").Replace("\n", ""));
 		}
 	}
 }
