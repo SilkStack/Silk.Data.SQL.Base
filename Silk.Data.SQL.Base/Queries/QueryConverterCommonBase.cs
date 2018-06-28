@@ -237,7 +237,10 @@ namespace Silk.Data.SQL.Queries
 						break;
 					case TransactionExpression transaction:
 						Sql.AppendLine("BEGIN TRANSACTION;");
-						VisitExpressionGroup(transaction.Queries, ExpressionGroupType.Queries);
+						foreach (var query in transaction.Queries)
+						{
+							Visit(query);
+						}
 						Sql.AppendLine("COMMIT;");
 						break;
 					case CreateTableExpression create:
