@@ -249,7 +249,7 @@ namespace Silk.Data.SQL.Queries
 								.ToArray();
 						if (primaryKeyColumnNames.Length > 0)
 						{
-							Sql.Append($", CONSTRAINT {Converter.QuoteIdentifier("PK")} PRIMARY KEY ({string.Join(",", primaryKeyColumnNames)})");
+							Sql.Append($", CONSTRAINT {Converter.QuoteIdentifier($"PK_{create.TableName}")} PRIMARY KEY ({string.Join(",", primaryKeyColumnNames)})");
 						}
 						Sql.Append(")");
 						break;
