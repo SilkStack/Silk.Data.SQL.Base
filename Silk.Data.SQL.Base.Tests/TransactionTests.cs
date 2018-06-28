@@ -23,8 +23,8 @@ namespace Silk.Data.SQL.Base.Tests
 						)
 				));
 			Assert.AreEqual(@"BEGIN TRANSACTION;
-DELETE FROM [TestTable] WHERE ([Id] =  @valueParameter1 ); ;
-DELETE FROM [TestTable] WHERE ([Id] =  @valueParameter2 ); ;
+DELETE FROM [TestTable] WHERE ([Id] =  @valueParameter1 ); 
+DELETE FROM [TestTable] WHERE ([Id] =  @valueParameter2 ); 
 COMMIT;
 ; ".Replace("\r", "").Replace("\n",""), sqlQuery.SqlText.Replace("\r", "").Replace("\n", ""));
 		}

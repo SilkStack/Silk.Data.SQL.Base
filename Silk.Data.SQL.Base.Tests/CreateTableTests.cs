@@ -19,7 +19,7 @@ namespace Silk.Data.SQL.Base.Tests
 					QueryExpression.DefineColumn("Column3", SqlDataType.Text()),
 					QueryExpression.DefineColumn("Column4", SqlDataType.UnsignedInt())
 				));
-			Assert.AreEqual("CREATE TABLE [TestTable] ([Column1] Int() NOT NULL AUTOINC, [Column2] Text(255) NOT NULL, [Column3] Text(), [Column4] UNSIGNED Int() NOT NULL, CONSTRAINT [PK] PRIMARY KEY ([Column1],[Column2])); ", sqlQuery.SqlText);
+			Assert.AreEqual("CREATE TABLE [TestTable] ([Column1] Int() NOT NULL AUTOINC, [Column2] Text(255) NOT NULL, [Column3] Text(), [Column4] UNSIGNED Int() NOT NULL, CONSTRAINT [PK_TestTable] PRIMARY KEY ([Column1],[Column2])); ", sqlQuery.SqlText);
 		}
 
 		[TestMethod]
