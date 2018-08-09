@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard1.2</TargetFramework>
     <RootNamespace>Silk.Data.SQL</RootNamespace>
-    <Version>0.0.5</Version>
+    <Version>0.0.6-alpha1</Version>
     <Authors>John Carruthers</Authors>
     <Company />
     <Product>SilkStack</Product>
