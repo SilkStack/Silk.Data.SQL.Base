@@ -82,14 +82,19 @@ namespace Silk.Data.SQL.Queries
 				case LastInsertIdFunctionExpression lastInsertIdExpression:
 					break;
 				case InFunctionExpression inExpression:
-					Sql.Append(" IN (");
+					var bracesNeeded = !(inExpression.Expressions.FirstOrDefault() is SelectExpression);
+					Sql.Append(" IN ");
+					if (bracesNeeded)
+						Sql.Append("(");
 					for (var i = 0; i < inExpression.Expressions.Length; i++)
 					{
 						ExpressionWriter.Visit(inExpression.Expressions[i]);
 						if (i < inExpression.Expressions.Length - 1)
 							Sql.Append(", ");
 					}
-					Sql.Append(") ");
+					if (bracesNeeded)
+						Sql.Append(")");
+					Sql.Append(" ");
 					break;
 				case DistinctFunctionExpression distinctExpression:
 					Sql.Append(" DISTINCT ");
