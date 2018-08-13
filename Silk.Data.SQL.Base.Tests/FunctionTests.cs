@@ -47,5 +47,15 @@ namespace Silk.Data.SQL.Base.Tests
 				}));
 			Assert.AreEqual("SELECT  RANDOM(); ", sqlQuery.SqlText);
 		}
+
+		[TestMethod]
+		public void ConcatFunction()
+		{
+			var sqlQuery = _queryConverter.ConvertToQuery(
+				QueryExpression.Select(new[] {
+					QueryExpression.Concat(QueryExpression.Value("Hello"), QueryExpression.Value(" "), QueryExpression.Value("World"))
+				}));
+			Assert.AreEqual("SELECT  CONCAT(  @valueParameter1 ,  @valueParameter2 ,  @valueParameter3 ) ; ", sqlQuery.SqlText);
+		}
 	}
 }
