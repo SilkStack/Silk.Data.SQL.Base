@@ -93,6 +93,16 @@ namespace Silk.Data.SQL.Queries
 				//  documented functions that have no generic implementation
 				case LastInsertIdFunctionExpression lastInsertIdExpression:
 					break;
+				case ConcatenateQueryExpression concatenateQueryExpression:
+					Sql.Append(" CONCAT( ");
+					for (var i = 0; i < concatenateQueryExpression.Expressions.Length; i++)
+					{
+						ExpressionWriter.Visit(concatenateQueryExpression.Expressions[i]);
+						if (i < concatenateQueryExpression.Expressions.Length - 1)
+							Sql.Append(", ");
+					}
+					Sql.Append(") ");
+					break;
 				case InFunctionExpression inExpression:
 					var bracesNeeded = !(inExpression.Expressions.FirstOrDefault() is SelectExpression);
 					Sql.Append(" IN ");
