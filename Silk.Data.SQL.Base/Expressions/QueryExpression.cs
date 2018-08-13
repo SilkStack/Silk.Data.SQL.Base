@@ -182,9 +182,9 @@ namespace Silk.Data.SQL.Expressions
 		}
 
 		public static JoinExpression Join(ColumnExpression leftColumn, ColumnExpression rightColumn,
-			JoinDirection direction = JoinDirection.Inner)
+			JoinDirection direction = JoinDirection.Inner, QueryExpression onCondition = null)
 		{
-			return new JoinExpression(leftColumn, rightColumn, direction);
+			return new JoinExpression(leftColumn, rightColumn, direction, onCondition);
 		}
 
 		/// <summary>

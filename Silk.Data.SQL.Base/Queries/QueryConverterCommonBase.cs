@@ -437,9 +437,16 @@ namespace Silk.Data.SQL.Queries
 					Sql.Append("JOIN ");
 					Visit(joinExpression.RightColumn.Source);
 					Sql.Append(" ON ");
-					VisitPossiblyAliasedColumn(joinExpression.LeftColumn);
-					Sql.Append(" = ");
-					VisitPossiblyAliasedColumn(joinExpression.RightColumn);
+					if (joinExpression.OnCondition == null)
+					{
+						VisitPossiblyAliasedColumn(joinExpression.LeftColumn);
+						Sql.Append(" = ");
+						VisitPossiblyAliasedColumn(joinExpression.RightColumn);
+					}
+					else
+					{
+						Visit(joinExpression.OnCondition);
+					}
 				}
 			}
 
