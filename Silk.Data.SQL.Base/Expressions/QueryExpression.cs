@@ -199,6 +199,12 @@ namespace Silk.Data.SQL.Expressions
 		public static ArithmaticQueryExpression Divide(QueryExpression left, QueryExpression right)
 			=> new ArithmaticQueryExpression(left, ArithmaticOperator.Division, right);
 
+		public static ConcatenateQueryExpression Concat(params QueryExpression[] expressions)
+			=> new ConcatenateQueryExpression(expressions);
+
+		public static ConcatenateQueryExpression Concat(IEnumerable<QueryExpression> expressions)
+			=> Concat(expressions.ToArray());
+
 		/// <summary>
 		/// Creates a query expression representing a SELECT query.
 		/// </summary>
