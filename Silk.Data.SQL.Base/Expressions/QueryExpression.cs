@@ -187,6 +187,18 @@ namespace Silk.Data.SQL.Expressions
 			return new JoinExpression(leftColumn, rightColumn, direction, onCondition);
 		}
 
+		public static ArithmaticQueryExpression Add(QueryExpression left, QueryExpression right)
+			=> new ArithmaticQueryExpression(left, ArithmaticOperator.Addition, right);
+
+		public static ArithmaticQueryExpression Subtract(QueryExpression left, QueryExpression right)
+			=> new ArithmaticQueryExpression(left, ArithmaticOperator.Subtraction, right);
+
+		public static ArithmaticQueryExpression Multiply(QueryExpression left, QueryExpression right)
+			=> new ArithmaticQueryExpression(left, ArithmaticOperator.Multiplication, right);
+
+		public static ArithmaticQueryExpression Divide(QueryExpression left, QueryExpression right)
+			=> new ArithmaticQueryExpression(left, ArithmaticOperator.Division, right);
+
 		/// <summary>
 		/// Creates a query expression representing a SELECT query.
 		/// </summary>

@@ -29,6 +29,18 @@ namespace Silk.Data.SQL.Queries
 			return new SqlQuery(ProviderName, Sql.ToString(), ExpressionWriter.Parameters);
 		}
 
+		protected virtual string GetArithmaticOperatorString(ArithmaticOperator @operator)
+		{
+			switch (@operator)
+			{
+				case ArithmaticOperator.Addition: return "+";
+				case ArithmaticOperator.Division: return "/";
+				case ArithmaticOperator.Multiplication: return "*";
+				case ArithmaticOperator.Subtraction: return "-";
+			}
+			return null;
+		}
+
 		protected virtual string GetConditionOperatorString(ComparisonOperator @operator)
 		{
 			switch (@operator)
@@ -405,6 +417,15 @@ namespace Silk.Data.SQL.Queries
 					var operatorStr = Converter.GetBitwiseOperatorString(bitwiseExpression.Operator);
 					if (operatorStr == null)
 						throw new System.InvalidOperationException($"Unsupported condition operator: {bitwiseExpression.Operator}");
+
+					Sql.Append($" {operatorStr} ");
+				}
+				else if (binaryExpression.BinaryOperationType == BinaryOperation.Arithmatic &&
+					queryExpression is ArithmaticQueryExpression arithmaticExpression)
+				{
+					var operatorStr = Converter.GetArithmaticOperatorString(arithmaticExpression.Operator);
+					if (operatorStr == null)
+						throw new System.InvalidOperationException($"Unsupported arithmatic operator: {arithmaticExpression.Operator}");
 
 					Sql.Append($" {operatorStr} ");
 				}
