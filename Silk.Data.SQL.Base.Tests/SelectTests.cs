@@ -12,7 +12,7 @@ namespace Silk.Data.SQL.Base.Tests
 		[TestMethod]
 		public void SelectConstantValue()
 		{
-			var queryExpression = QueryExpression.Select(new[] { QueryExpression.Value(1) });
+			var queryExpression = QueryExpression.Select(projection: QueryExpression.Value(1));
 			var sqlQuery = _queryConverter.ConvertToQuery(queryExpression);
 
 			Assert.IsNotNull(sqlQuery);
@@ -29,12 +29,11 @@ namespace Silk.Data.SQL.Base.Tests
 		{
 			var tableExpression = QueryExpression.Table("TestTable");
 			var queryExpression = QueryExpression.Select(
-				new[] {
+				from: tableExpression,
+				projection: new[] {
 					QueryExpression.Column("TestColumn1", tableExpression),
 					QueryExpression.Column("TestColumn2", tableExpression)
-				},
-				from: tableExpression
-				);
+				});
 			var sqlQuery = _queryConverter.ConvertToQuery(queryExpression);
 
 			Assert.IsNotNull(sqlQuery);
@@ -46,11 +45,11 @@ namespace Silk.Data.SQL.Base.Tests
 		public void SelectFromSubQuery()
 		{
 			var subSelect = QueryExpression.Alias(
-				QueryExpression.Select(new[] { QueryExpression.Value(1) }),
+				QueryExpression.Select(projection: QueryExpression.Value(1) ),
 				"subSelect"
 				);
 			var queryExpression = QueryExpression.Select(
-				new[] { QueryExpression.All(subSelect.Identifier) },
+				projection: QueryExpression.All(subSelect.Identifier),
 				from: subSelect
 				);
 			var sqlQuery = _queryConverter.ConvertToQuery(queryExpression);
@@ -62,7 +61,7 @@ namespace Silk.Data.SQL.Base.Tests
 		{
 			var tableExpression = QueryExpression.Table("TestTable");
 			var queryExpression = QueryExpression.Select(
-				new[] {
+				projection: new[] {
 					QueryExpression.Column("TestColumn1", tableExpression),
 					QueryExpression.Column("TestColumn2", tableExpression)
 				},
@@ -83,7 +82,7 @@ namespace Silk.Data.SQL.Base.Tests
 		{
 			var tableExpression = QueryExpression.Table("TestTable");
 			var queryExpression = QueryExpression.Select(
-				new[] {
+				projection: new[] {
 					QueryExpression.Column("TestColumn1", tableExpression),
 					QueryExpression.Column("TestColumn2", tableExpression)
 				},
@@ -103,7 +102,7 @@ namespace Silk.Data.SQL.Base.Tests
 		{
 			var tableExpression = QueryExpression.Table("TestTable");
 			var queryExpression = QueryExpression.Select(
-				new[] {
+				projection: new[] {
 					QueryExpression.Column("TestColumn1", tableExpression),
 					QueryExpression.Column("TestColumn2", tableExpression)
 				},
@@ -124,7 +123,7 @@ namespace Silk.Data.SQL.Base.Tests
 		{
 			var tableExpression = QueryExpression.Table("TestTable");
 			var queryExpression = QueryExpression.Select(
-				new[] {
+				projection: new[] {
 					QueryExpression.Column("TestColumn1", tableExpression),
 					QueryExpression.Column("TestColumn2", tableExpression)
 				},
@@ -144,7 +143,7 @@ namespace Silk.Data.SQL.Base.Tests
 		{
 			var tableExpression = QueryExpression.Table("TestTable");
 			var queryExpression = QueryExpression.Select(
-				new[] {
+				projection: new[] {
 					QueryExpression.Column("TestColumn1", tableExpression),
 					QueryExpression.Column("TestColumn2", tableExpression)
 				},
@@ -164,7 +163,7 @@ namespace Silk.Data.SQL.Base.Tests
 		{
 			var tableExpression = QueryExpression.Table("TestTable");
 			var queryExpression = QueryExpression.Select(
-				new[] {
+				projection: new[] {
 					QueryExpression.Column("TestColumn1", tableExpression),
 					QueryExpression.Column("TestColumn2", tableExpression)
 				},
@@ -182,7 +181,7 @@ namespace Silk.Data.SQL.Base.Tests
 		{
 			var tableExpression = QueryExpression.Table("TestTable");
 			var queryExpression = QueryExpression.Select(
-				new[] {
+				projection: new[] {
 					QueryExpression.Column("TestColumn1", tableExpression),
 					QueryExpression.Column("TestColumn2", tableExpression)
 				},
@@ -202,7 +201,7 @@ namespace Silk.Data.SQL.Base.Tests
 		{
 			var tableExpression = QueryExpression.Table("TestTable");
 			var queryExpression = QueryExpression.Select(
-				new[] {
+				projection: new[] {
 					QueryExpression.Column("TestColumn1", tableExpression),
 					QueryExpression.Column("TestColumn2", tableExpression)
 				},
@@ -222,7 +221,7 @@ namespace Silk.Data.SQL.Base.Tests
 			var tableExpression = QueryExpression.Table("TestTable");
 			var joinTableExpression = QueryExpression.Table("TestTable2");
 			var queryExpression = QueryExpression.Select(
-				new[] {
+				projection: new[] {
 					QueryExpression.Column("TestColumn1", tableExpression),
 					QueryExpression.Column("TestColumn2", joinTableExpression)
 				},
@@ -248,7 +247,7 @@ namespace Silk.Data.SQL.Base.Tests
 			var joinAliasExpression1 = QueryExpression.Alias(joinTableExpression, "t2");
 			var joinAliasExpression2 = QueryExpression.Alias(joinTableExpression, "t3");
 			var queryExpression = QueryExpression.Select(
-				new[] {
+				projection: new[] {
 					QueryExpression.All()
 				},
 				from: tableExpression,
@@ -273,14 +272,14 @@ namespace Silk.Data.SQL.Base.Tests
 		public void ComplicatedSelect()
 		{
 			var sourceAliasExpression = QueryExpression.Alias(QueryExpression.Select(
-				new[] { QueryExpression.All() },
+				projection: QueryExpression.All(),
 				from: QueryExpression.Table("TestTable")
 				), "source");
 			var joinTableExpression = QueryExpression.Table("TestTable2");
 			var joinAliasExpression1 = QueryExpression.Alias(joinTableExpression, "t2");
 			var joinAliasExpression2 = QueryExpression.Alias(joinTableExpression, "t3");
 			var queryExpression = QueryExpression.Select(
-				new[] {
+				projection: new[] {
 					QueryExpression.All(sourceAliasExpression.Identifier),
 					QueryExpression.All(joinAliasExpression1.Identifier)
 				},

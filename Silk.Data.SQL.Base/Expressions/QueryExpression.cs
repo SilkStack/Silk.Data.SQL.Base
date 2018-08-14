@@ -227,6 +227,25 @@ namespace Silk.Data.SQL.Expressions
 		}
 
 		/// <summary>
+		/// Creates a query expression representing a SELECT query.
+		/// </summary>
+		/// <returns></returns>
+		public static SelectExpression Select(
+			QueryExpression projection,
+			QueryExpression from = null,
+			JoinExpression[] joins = null,
+			QueryExpression where = null,
+			QueryExpression having = null,
+			QueryExpression[] orderBy = null,
+			QueryExpression[] groupBy = null,
+			QueryExpression offset = null,
+			QueryExpression limit = null
+			)
+		{
+			return Select(new[] { projection }, from, joins, where, having, orderBy, groupBy, offset, limit);
+		}
+
+		/// <summary>
 		/// Creates a query expression representing an INSERT query.
 		/// </summary>
 		/// <param name="table"></param>

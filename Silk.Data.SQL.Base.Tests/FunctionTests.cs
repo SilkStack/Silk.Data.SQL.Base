@@ -12,9 +12,9 @@ namespace Silk.Data.SQL.Base.Tests
 		public void DistinctFunction()
 		{
 			var sqlQuery = _queryConverter.ConvertToQuery(
-				QueryExpression.Select(new[] {
-					QueryExpression.Distinct(QueryExpression.All())
-				}));
+				QueryExpression.Select(
+					projection: QueryExpression.Distinct(QueryExpression.All())
+				));
 			Assert.AreEqual("SELECT  DISTINCT *; ", sqlQuery.SqlText);
 		}
 
@@ -22,9 +22,9 @@ namespace Silk.Data.SQL.Base.Tests
 		public void CountFunction()
 		{
 			var sqlQuery = _queryConverter.ConvertToQuery(
-				QueryExpression.Select(new[] {
-					QueryExpression.CountFunction()
-				}));
+				QueryExpression.Select(
+					projection: QueryExpression.CountFunction()
+				));
 			Assert.AreEqual("SELECT  COUNT() ; ", sqlQuery.SqlText);
 		}
 
@@ -32,9 +32,9 @@ namespace Silk.Data.SQL.Base.Tests
 		public void CountWithParameterFunction()
 		{
 			var sqlQuery = _queryConverter.ConvertToQuery(
-				QueryExpression.Select(new[] {
-					QueryExpression.CountFunction(QueryExpression.All())
-				}));
+				QueryExpression.Select(
+					projection: QueryExpression.CountFunction(QueryExpression.All())
+				));
 			Assert.AreEqual("SELECT  COUNT(*) ; ", sqlQuery.SqlText);
 		}
 
@@ -42,9 +42,9 @@ namespace Silk.Data.SQL.Base.Tests
 		public void RandomFunction()
 		{
 			var sqlQuery = _queryConverter.ConvertToQuery(
-				QueryExpression.Select(new[] {
-					QueryExpression.Random()
-				}));
+				QueryExpression.Select(
+					projection: QueryExpression.Random()
+				));
 			Assert.AreEqual("SELECT  RANDOM(); ", sqlQuery.SqlText);
 		}
 
@@ -52,9 +52,9 @@ namespace Silk.Data.SQL.Base.Tests
 		public void ConcatFunction()
 		{
 			var sqlQuery = _queryConverter.ConvertToQuery(
-				QueryExpression.Select(new[] {
-					QueryExpression.Concat(QueryExpression.Value("Hello"), QueryExpression.Value(" "), QueryExpression.Value("World"))
-				}));
+				QueryExpression.Select(
+					projection: QueryExpression.Concat(QueryExpression.Value("Hello"), QueryExpression.Value(" "), QueryExpression.Value("World"))
+				));
 			Assert.AreEqual("SELECT  CONCAT(  @valueParameter1 ,  @valueParameter2 ,  @valueParameter3 ) ; ", sqlQuery.SqlText);
 		}
 	}

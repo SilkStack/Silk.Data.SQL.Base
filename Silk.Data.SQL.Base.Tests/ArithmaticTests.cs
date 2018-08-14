@@ -15,9 +15,9 @@ namespace Silk.Data.SQL.Base.Tests
 		public void Addition()
 		{
 			var sqlQuery = _queryConverter.ConvertToQuery(
-				QueryExpression.Select(new[] {
-					QueryExpression.Add(QueryExpression.Value(1), QueryExpression.Value(2))
-				}));
+				QueryExpression.Select(
+					projection: QueryExpression.Add(QueryExpression.Value(1), QueryExpression.Value(2))
+				));
 			Assert.AreEqual("SELECT ( @valueParameter1  +  @valueParameter2 ); ", sqlQuery.SqlText);
 		}
 
@@ -25,9 +25,9 @@ namespace Silk.Data.SQL.Base.Tests
 		public void Subtraction()
 		{
 			var sqlQuery = _queryConverter.ConvertToQuery(
-				QueryExpression.Select(new[] {
-					QueryExpression.Subtract(QueryExpression.Value(1), QueryExpression.Value(2))
-				}));
+				QueryExpression.Select(
+					projection: QueryExpression.Subtract(QueryExpression.Value(1), QueryExpression.Value(2))
+				));
 			Assert.AreEqual("SELECT ( @valueParameter1  -  @valueParameter2 ); ", sqlQuery.SqlText);
 		}
 
@@ -35,9 +35,9 @@ namespace Silk.Data.SQL.Base.Tests
 		public void Multiplication()
 		{
 			var sqlQuery = _queryConverter.ConvertToQuery(
-				QueryExpression.Select(new[] {
-					QueryExpression.Multiply(QueryExpression.Value(1), QueryExpression.Value(2))
-				}));
+				QueryExpression.Select(
+					projection: QueryExpression.Multiply(QueryExpression.Value(1), QueryExpression.Value(2))
+				));
 			Assert.AreEqual("SELECT ( @valueParameter1  *  @valueParameter2 ); ", sqlQuery.SqlText);
 		}
 
@@ -45,9 +45,9 @@ namespace Silk.Data.SQL.Base.Tests
 		public void Division()
 		{
 			var sqlQuery = _queryConverter.ConvertToQuery(
-				QueryExpression.Select(new[] {
-					QueryExpression.Divide(QueryExpression.Value(1), QueryExpression.Value(2))
-				}));
+				QueryExpression.Select(
+					projection: QueryExpression.Divide(QueryExpression.Value(1), QueryExpression.Value(2))
+				));
 			Assert.AreEqual("SELECT ( @valueParameter1  /  @valueParameter2 ); ", sqlQuery.SqlText);
 		}
 
@@ -55,9 +55,9 @@ namespace Silk.Data.SQL.Base.Tests
 		public void Nested()
 		{
 			var sqlQuery = _queryConverter.ConvertToQuery(
-				QueryExpression.Select(new[] {
-					QueryExpression.Add(QueryExpression.Value(1), QueryExpression.Multiply(QueryExpression.Value(2), QueryExpression.Value(3)))
-				}));
+				QueryExpression.Select(
+					projection: QueryExpression.Add(QueryExpression.Value(1), QueryExpression.Multiply(QueryExpression.Value(2), QueryExpression.Value(3)))
+				));
 			Assert.AreEqual("SELECT ( @valueParameter1  + ( @valueParameter2  *  @valueParameter3 )); ", sqlQuery.SqlText);
 		}
 	}
