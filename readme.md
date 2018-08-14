@@ -98,7 +98,7 @@ The following common SQL storage types are exposed:
 # Planned Features
 
 * More SQL functions support
-* Arithmatic expression support
+* More math expression support
 * Define and install SQL functions/procedures using the `QueryExpression` API.
 
 # Limitations
