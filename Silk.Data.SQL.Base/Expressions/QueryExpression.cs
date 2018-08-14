@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Silk.Data.SQL.Expressions
@@ -181,10 +182,26 @@ namespace Silk.Data.SQL.Expressions
 			return new ConditionExpression(left, ConditionType.OrElse, right);
 		}
 
+		public static JoinExpression Join(QueryExpression source, ColumnExpression leftColumn, ColumnExpression rightColumn,
+			JoinDirection direction = JoinDirection.Inner)
+		{
+			return new JoinExpression(source, direction,
+				Compare(leftColumn, ComparisonOperator.AreEqual, rightColumn));
+		}
+
+		public static JoinExpression Join(QueryExpression source, QueryExpression on,
+			JoinDirection direction = JoinDirection.Inner)
+		{
+			return new JoinExpression(source, direction, on);
+		}
+
+		[Obsolete]
 		public static JoinExpression Join(ColumnExpression leftColumn, ColumnExpression rightColumn,
 			JoinDirection direction = JoinDirection.Inner, QueryExpression onCondition = null)
 		{
-			return new JoinExpression(leftColumn, rightColumn, direction, onCondition);
+			if (onCondition != null)
+				return Join(rightColumn.Source, onCondition, direction);
+			return Join(rightColumn.Source, leftColumn, rightColumn, direction);
 		}
 
 		public static ArithmaticQueryExpression Add(QueryExpression left, QueryExpression right)

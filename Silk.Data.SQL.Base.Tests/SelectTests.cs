@@ -236,7 +236,7 @@ namespace Silk.Data.SQL.Base.Tests
 				);
 
 			var sqlQuery = _queryConverter.ConvertToQuery(queryExpression);
-			Assert.AreEqual("SELECT [TestTable].[TestColumn1], [TestTable2].[TestColumn2] FROM [TestTable] INNER JOIN [TestTable2] ON [TestTable].[TestColumn1] = [TestTable2].[TestColumn2]; ", sqlQuery.SqlText);
+			Assert.AreEqual("SELECT [TestTable].[TestColumn1], [TestTable2].[TestColumn2] FROM [TestTable] INNER JOIN [TestTable2] ON ([TestTable].[TestColumn1] = [TestTable2].[TestColumn2]); ", sqlQuery.SqlText);
 		}
 
 		[TestMethod]
@@ -254,18 +254,20 @@ namespace Silk.Data.SQL.Base.Tests
 				joins: new[]
 				{
 					QueryExpression.Join(
+						joinAliasExpression1,
 						QueryExpression.Column("TestColumn1", tableExpression),
-						QueryExpression.Column("TestColumn2", joinAliasExpression1)
+						QueryExpression.Column("TestColumn2", joinAliasExpression1.Identifier)
 						),
 					QueryExpression.Join(
+						joinAliasExpression2,
 						QueryExpression.Column("TestColumn1", tableExpression),
-						QueryExpression.Column("TestColumn3", joinAliasExpression2)
+						QueryExpression.Column("TestColumn3", joinAliasExpression2.Identifier)
 						)
 				}
 				);
 
 			var sqlQuery = _queryConverter.ConvertToQuery(queryExpression);
-			Assert.AreEqual("SELECT * FROM [TestTable] INNER JOIN [TestTable2] AS [t2] ON [TestTable].[TestColumn1] = [t2].[TestColumn2] INNER JOIN [TestTable2] AS [t3] ON [TestTable].[TestColumn1] = [t3].[TestColumn3]; ", sqlQuery.SqlText);
+			Assert.AreEqual("SELECT * FROM [TestTable] INNER JOIN [TestTable2] AS [t2] ON ([TestTable].[TestColumn1] = [t2].[TestColumn2]) INNER JOIN [TestTable2] AS [t3] ON ([TestTable].[TestColumn1] = [t3].[TestColumn3]); ", sqlQuery.SqlText);
 		}
 
 		[TestMethod]
@@ -287,12 +289,14 @@ namespace Silk.Data.SQL.Base.Tests
 				joins: new[]
 				{
 					QueryExpression.Join(
-						QueryExpression.Column("TestColumn1", sourceAliasExpression),
-						QueryExpression.Column("TestColumn2", joinAliasExpression1)
+						joinAliasExpression1,
+						QueryExpression.Column("TestColumn1", sourceAliasExpression.Identifier),
+						QueryExpression.Column("TestColumn2", joinAliasExpression1.Identifier)
 						),
 					QueryExpression.Join(
-						QueryExpression.Column("TestColumn1", sourceAliasExpression),
-						QueryExpression.Column("TestColumn3", joinAliasExpression2)
+						joinAliasExpression2,
+						QueryExpression.Column("TestColumn1", sourceAliasExpression.Identifier),
+						QueryExpression.Column("TestColumn3", joinAliasExpression2.Identifier)
 						)
 				},
 				where: QueryExpression.Compare(QueryExpression.Column("TestColumn3", joinAliasExpression2.Identifier), ComparisonOperator.AreEqual, QueryExpression.Value(1)),
@@ -303,7 +307,7 @@ namespace Silk.Data.SQL.Base.Tests
 				);
 
 			var sqlQuery = _queryConverter.ConvertToQuery(queryExpression);
-			Assert.AreEqual("SELECT [source].*, [t2].* FROM (SELECT * FROM [TestTable])  AS [source] INNER JOIN [TestTable2] AS [t2] ON [source].[TestColumn1] = [t2].[TestColumn2] INNER JOIN [TestTable2] AS [t3] ON [source].[TestColumn1] = [t3].[TestColumn3] WHERE ([t3].[TestColumn3] =  @valueParameter1 ) GROUP BY [source].[TestColumn1] ORDER BY [t2].[TestColumn2] LIMIT  @valueParameter2  OFFSET  @valueParameter3 ; ", sqlQuery.SqlText);
+			Assert.AreEqual("SELECT [source].*, [t2].* FROM (SELECT * FROM [TestTable])  AS [source] INNER JOIN [TestTable2] AS [t2] ON ([source].[TestColumn1] = [t2].[TestColumn2]) INNER JOIN [TestTable2] AS [t3] ON ([source].[TestColumn1] = [t3].[TestColumn3]) WHERE ([t3].[TestColumn3] =  @valueParameter1 ) GROUP BY [source].[TestColumn1] ORDER BY [t2].[TestColumn2] LIMIT  @valueParameter2  OFFSET  @valueParameter3 ; ", sqlQuery.SqlText);
 		}
 	}
 }

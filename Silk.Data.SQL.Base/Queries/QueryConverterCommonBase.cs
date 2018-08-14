@@ -466,18 +466,9 @@ namespace Silk.Data.SQL.Queries
 							break;
 					}
 					Sql.Append("JOIN ");
-					Visit(joinExpression.RightColumn.Source);
+					Visit(joinExpression.Source);
 					Sql.Append(" ON ");
-					if (joinExpression.OnCondition == null)
-					{
-						VisitPossiblyAliasedColumn(joinExpression.LeftColumn);
-						Sql.Append(" = ");
-						VisitPossiblyAliasedColumn(joinExpression.RightColumn);
-					}
-					else
-					{
-						Visit(joinExpression.OnCondition);
-					}
+					Visit(joinExpression.OnCondition);
 				}
 			}
 
@@ -520,16 +511,6 @@ namespace Silk.Data.SQL.Queries
 						Sql.Append($" {Converter.AutoIncrementSql}");
 					}
 				}
-			}
-
-			private void VisitPossiblyAliasedColumn(ColumnExpression queryExpression)
-			{
-				if (queryExpression.Source is AliasExpression sourceAliasExpression)
-				{
-					Visit(QueryExpression.Column(queryExpression.ColumnName, QueryExpression.Table(sourceAliasExpression.Identifier.Identifier)));
-					return;
-				}
-				Visit(queryExpression);
 			}
 		}
 	}

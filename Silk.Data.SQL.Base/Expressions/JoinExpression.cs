@@ -10,17 +10,15 @@
 	public class JoinExpression : QueryExpression
 	{
 		public override ExpressionNodeType NodeType => ExpressionNodeType.Join;
-
-		public ColumnExpression LeftColumn { get; }
-		public ColumnExpression RightColumn { get; }
+		
+		public QueryExpression Source { get; }
 		public JoinDirection Direction { get; }
 		public QueryExpression OnCondition { get; }
 
-		public JoinExpression(ColumnExpression leftColumn, ColumnExpression rightColumn,
+		public JoinExpression(QueryExpression source,
 			JoinDirection direction, QueryExpression onCondition)
 		{
-			LeftColumn = leftColumn;
-			RightColumn = rightColumn;
+			Source = source;
 			Direction = direction;
 			OnCondition = onCondition;
 		}

@@ -148,8 +148,8 @@ namespace Silk.Data.SQL.Expressions
 		{
 			if (queryExpression is JoinExpression joinExpression)
 			{
-				Visit(joinExpression.LeftColumn);
-				Visit(joinExpression.RightColumn);
+				Visit(joinExpression.Source);
+				Visit(joinExpression.OnCondition);
 			}
 		}
 
