@@ -6,11 +6,14 @@
 
 		public new TableExpression Table { get; }
 		public QueryExpression WhereConditions { get; }
+		public QueryExpression Limit { get; }
 
-		public DeleteExpression(TableExpression table, QueryExpression whereConditions)
+		public DeleteExpression(TableExpression table, QueryExpression whereConditions,
+			QueryExpression limit = null)
 		{
 			Table = table;
 			WhereConditions = whereConditions;
+			Limit = limit;
 		}
 	}
 }

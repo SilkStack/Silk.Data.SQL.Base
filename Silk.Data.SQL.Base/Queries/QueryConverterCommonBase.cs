@@ -240,6 +240,11 @@ namespace Silk.Data.SQL.Queries
 							Sql.Append(" WHERE ");
 							Visit(update.WhereConditions);
 						}
+						if (update.Limit != null)
+						{
+							Sql.Append(" LIMIT ");
+							Visit(update.Limit);
+						}
 						QueryDepth--;
 						break;
 					case DeleteExpression delete:
@@ -250,6 +255,11 @@ namespace Silk.Data.SQL.Queries
 						{
 							Sql.Append(" WHERE ");
 							Visit(delete.WhereConditions);
+						}
+						if (delete.Limit != null)
+						{
+							Sql.Append(" LIMIT ");
+							Visit(delete.Limit);
 						}
 						QueryDepth--;
 						break;
