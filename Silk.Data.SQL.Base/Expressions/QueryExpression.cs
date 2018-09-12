@@ -341,29 +341,15 @@ namespace Silk.Data.SQL.Expressions
 		}
 
 		/// <summary>
-		/// Creates a query expression representing an UPDATE query.
-		/// </summary>
-		/// <param name="table"></param>
-		/// <param name="where"></param>
-		/// <param name="assignments"></param>
-		/// <returns></returns>
-		public static UpdateExpression Update(TableExpression table,
-			QueryExpression where = null, QueryExpression limit = null,
-			params AssignColumnExpression[] assignments)
-		{
-			return new UpdateExpression(table, assignments, where, limit);
-		}
-
-		/// <summary>
 		/// Creates a query expression representing a DELETE query.
 		/// </summary>
 		/// <param name="table"></param>
 		/// <param name="whereConditions"></param>
 		/// <returns></returns>
 		public static DeleteExpression Delete(TableExpression table,
-			QueryExpression whereConditions = null, QueryExpression limit = null)
+			QueryExpression whereConditions = null)
 		{
-			return new DeleteExpression(table, whereConditions, limit);
+			return new DeleteExpression(table, whereConditions);
 		}
 
 		/// <summary>
