@@ -395,6 +395,13 @@ namespace Silk.Data.SQL.Queries
 				}
 			}
 
+			private bool IsNullValueExpression(QueryExpression queryExpression)
+			{
+				if (!(queryExpression is ValueExpression valueExpression))
+					return false;
+				return valueExpression.Value == null;
+			}
+
 			protected override void VisitBinary(QueryExpression queryExpression)
 			{
 				var binaryExpression = queryExpression as BinaryQueryExpression;
@@ -402,7 +409,6 @@ namespace Silk.Data.SQL.Queries
 					return;
 
 				Sql.Append("(");
-				Visit(binaryExpression.Left);
 
 				if (binaryExpression.BinaryOperationType == BinaryOperation.Comparison &&
 					queryExpression is ComparisonExpression comparisonExpression)
@@ -411,9 +417,37 @@ namespace Silk.Data.SQL.Queries
 					if (operatorStr == null)
 						throw new System.InvalidOperationException($"Unsupported condition operator: {comparisonExpression.Operator}");
 
-					Sql.Append($" {operatorStr} ");
+					var leftIsNullValue = IsNullValueExpression(comparisonExpression.Left);
+					var rightIsNullValue = IsNullValueExpression(comparisonExpression.Right);
+
+					if (rightIsNullValue)
+					{
+						Visit(binaryExpression.Left);
+						if (comparisonExpression.Operator == ComparisonOperator.AreEqual)
+							Sql.Append(" IS NULL ");
+						else
+							Sql.Append(" IS NOT NULL ");
+					}
+					else if (leftIsNullValue)
+					{
+						Visit(binaryExpression.Right);
+						if (comparisonExpression.Operator == ComparisonOperator.AreEqual)
+							Sql.Append(" IS NULL ");
+						else
+							Sql.Append(" IS NOT NULL ");
+					}
+					else
+					{
+						Visit(binaryExpression.Left);
+						Sql.Append($" {operatorStr} ");
+						Visit(binaryExpression.Right);
+					}
+					Sql.Append(")");
+					return;
 				}
-				else if (binaryExpression.BinaryOperationType == BinaryOperation.Condition &&
+
+				Visit(binaryExpression.Left);
+				if (binaryExpression.BinaryOperationType == BinaryOperation.Condition &&
 					queryExpression is ConditionExpression conditionExpression)
 				{
 					if (conditionExpression.ConditionType == ConditionType.AndAlso)
