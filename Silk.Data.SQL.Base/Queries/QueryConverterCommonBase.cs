@@ -131,6 +131,18 @@ namespace Silk.Data.SQL.Queries
 				case RandomFunctionExpression randomExpression:
 					Sql.Append(" RANDOM()");
 					break;
+				case MinFunctionExpression minExpression:
+					Sql.Append(" MIN(");
+					if (minExpression.Expression != null)
+						ExpressionWriter.Visit(minExpression.Expression);
+					Sql.Append(") ");
+					break;
+				case MaxFunctionExpression maxExpression:
+					Sql.Append(" MAX(");
+					if (maxExpression.Expression != null)
+						ExpressionWriter.Visit(maxExpression.Expression);
+					Sql.Append(") ");
+					break;
 			}
 		}
 

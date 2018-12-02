@@ -142,6 +142,16 @@ namespace Silk.Data.SQL.Expressions
 			return new RandomFunctionExpression();
 		}
 
+		public static MinFunctionExpression Min(QueryExpression expression = null)
+		{
+			return new MinFunctionExpression(expression);
+		}
+
+		public static MaxFunctionExpression Max(QueryExpression expression = null)
+		{
+			return new MaxFunctionExpression(expression);
+		}
+
 		public static TableExistsVirtualFunctionExpression TableExists(string tableName)
 		{
 			return TableExists(Table(tableName));

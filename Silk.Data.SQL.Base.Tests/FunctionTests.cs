@@ -57,5 +57,45 @@ namespace Silk.Data.SQL.Base.Tests
 				));
 			Assert.AreEqual("SELECT  CONCAT(  @valueParameter1 ,  @valueParameter2 ,  @valueParameter3 ) ; ", sqlQuery.SqlText);
 		}
+
+		[TestMethod]
+		public void MinFunction()
+		{
+			var sqlQuery = _queryConverter.ConvertToQuery(
+				QueryExpression.Select(
+					projection: QueryExpression.Min()
+				));
+			Assert.AreEqual("SELECT  MIN() ; ", sqlQuery.SqlText);
+		}
+
+		[TestMethod]
+		public void MinWithParameterFunction()
+		{
+			var sqlQuery = _queryConverter.ConvertToQuery(
+				QueryExpression.Select(
+					projection: QueryExpression.Min(QueryExpression.All())
+				));
+			Assert.AreEqual("SELECT  MIN(*) ; ", sqlQuery.SqlText);
+		}
+
+		[TestMethod]
+		public void MaxFunction()
+		{
+			var sqlQuery = _queryConverter.ConvertToQuery(
+				QueryExpression.Select(
+					projection: QueryExpression.Max()
+				));
+			Assert.AreEqual("SELECT  MAX() ; ", sqlQuery.SqlText);
+		}
+
+		[TestMethod]
+		public void MaxWithParameterFunction()
+		{
+			var sqlQuery = _queryConverter.ConvertToQuery(
+				QueryExpression.Select(
+					projection: QueryExpression.Max(QueryExpression.All())
+				));
+			Assert.AreEqual("SELECT  MAX(*) ; ", sqlQuery.SqlText);
+		}
 	}
 }
